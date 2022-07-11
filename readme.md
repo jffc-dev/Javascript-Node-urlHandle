@@ -1,0 +1,1 @@
+nssm.exe install manejoCadenas G:\Programas\Node\node.exe D:\Node\manejoCadenas\src\index.js
