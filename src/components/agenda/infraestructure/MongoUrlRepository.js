@@ -41,10 +41,27 @@ class MongoUrlRepository {
   }
 
   async addTitle (id, title, field) {
-    const {titles} = await this.mongoDB.get(this.collection, id)
-    const newId = titles ? Math.max(...titles.map(o => o._id), 0) + 1 : 1
-    const url = await this.mongoDB.updatePush(this.collection, id, {"titles": {"_id":newId,"title": title,"audi_createdDate": new Date()}})
-    return { url }
+    const responseGet = await this.mongoDB.get(this.collection, id)
+    
+    if(responseGet){
+      const {titles} = responseGet
+      const newId = titles ? Math.max(...titles.map(o => o._id), 0) + 1 : 1
+      const newObj = {"_id":newId,"title": title,"audi_createdDate": new Date()}
+      const {result} = await this.mongoDB.updatePush(this.collection, id, {"titles": newObj})
+
+      return {
+        status: result.ok = 1 ? 1 : 0,
+        msg: result.ok = 1 ? 'Se agregó el título correctamente.' : 'No se encontró la url.',
+        rpta: newObj
+      }
+
+    }else{
+      return {
+        status: 0,
+        msg: 'No se encontró la url.',
+        rpta: ''
+      }
+    }
   }
 }
 

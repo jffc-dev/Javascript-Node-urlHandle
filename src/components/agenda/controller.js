@@ -102,9 +102,9 @@ export const obtenerContenidoUrl = async (req, res, next) => {
 export const agregarTituloUrl = async (req, res, next) => {
   try {
     const query = AgregarTituloUrl({ UrlRepository })
-    const contenido = await query({id: req.params.id, title: req.body.title, field: {_id:0, titles: 1}})
+    const result = await query({id: req.params.id, title: req.body.title, field: {_id:0, titles: 1}})
     res.status(201).json({
-      contenido
+      ...result
     })
   } catch (e) {
     next(e)
