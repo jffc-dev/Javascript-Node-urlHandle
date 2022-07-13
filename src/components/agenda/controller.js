@@ -6,6 +6,7 @@ import ObtenerUnaUrl from './application/obtenerUnaUrl.js'
 import ObtenerUrls from './application/obtenerUrls.js'
 import ObtenerUrlsRandom from './application/ObtenerUrlsRandom.js'
 import ObtenerContenidoUrl from './application/obtenerContenidoUrl.js'
+import AgregarTituloUrl from './application/agregarTituloUrl.js'
 
 const UrlRepository = new MongoUrlRepository()
 
@@ -51,9 +52,9 @@ export const eliminarUrl = async (req, res, next) => {
 export const obtenerUnaUrl = async (req, res, next) => {
   try {
     const query = ObtenerUnaUrl({ UrlRepository })
-    const person = await query(req.params.id)
+    const url = await query({"id": req.params.id})
     res.status(201).json({
-      person
+      url
     })
   } catch (e) {
     next(e)
@@ -85,8 +86,10 @@ export const obtenerUrlsRandom = async (req, res, next) => {
 
 export const obtenerContenidoUrl = async (req, res, next) => {
   try {
+    const queryGet = ObtenerUnaUrl({ UrlRepository })
+    const {url: urlFound} = await queryGet({"id": req.body.id})
     const query = ObtenerContenidoUrl({ UrlRepository })
-    const contenido = await query({url: req.body.url})
+    const contenido = await query({url: urlFound.url})
     res.status(201).json({
       contenido
     })
@@ -95,3 +98,15 @@ export const obtenerContenidoUrl = async (req, res, next) => {
   }
 }
 
+
+export const agregarTituloUrl = async (req, res, next) => {
+  try {
+    const query = AgregarTituloUrl({ UrlRepository })
+    const contenido = await query({id: req.params.id, title: req.body.title, field: {_id:0, titles: 1}})
+    res.status(201).json({
+      contenido
+    })
+  } catch (e) {
+    next(e)
+  }
+}

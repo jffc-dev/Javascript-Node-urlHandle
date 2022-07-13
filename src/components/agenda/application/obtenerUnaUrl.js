@@ -1,10 +1,10 @@
 /**
  * @param {Object} obj
- * @param {import('../infraestructure/MongoPersonRepository')} obj.PersonRepository
+ * @param {import('../infraestructure/MongoUrlRepository')} obj.UrlRepository
  */
 
-export default ({ PersonRepository }) => {
+export default ({ UrlRepository }) => {
   return async ({ id }) => {
-    return await PersonRepository.get(id)
+    return await UrlRepository.get(id)
   }
 }

@@ -1,12 +1,15 @@
 import axios from 'axios'
 
-export default ({ UrlRepository }) => {
+export default () => {
     return async ({ url }) => {
         let contenido = ""
+        let titulo = ""
         await axios.get(url)
         .then(function (response) {
             // handle success
             contenido = response.data;
+            titulo = contenido.substring(contenido.toLowerCase().indexOf("<title>"),
+            contenido.toLowerCase().indexOf("</title>"))
           })
           .catch(function (error) {
             // handle error
@@ -16,10 +19,10 @@ export default ({ UrlRepository }) => {
           .then(function () {
             console.log('34');
           });
-
-        console.log(contenido.indexOf("<title>"));
-        console.log(contenido.indexOf("</title>"));
-        console.log(contenido.substring(contenido.indexOf("<title>"),contenido.indexOf("</title>")).replace('<title>',''));
-        return contenido;
+        return {
+          url,
+          contenido,
+          "titulo": titulo.substring(7, titulo.length).trim()
+        };
     }
 }

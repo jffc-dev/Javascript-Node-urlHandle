@@ -54,9 +54,7 @@ class MongoLib {
 
   async createMany (collection, data) {
     const db = await this.connect()
-    console.log(data);
     const result = await db.collection(collection).insertMany(data)
-    console.log(result);
     return result
   }
 
@@ -64,6 +62,12 @@ class MongoLib {
     const db = await this.connect()
     const result = db.collection(collection).updateOne({ _id: ObjectId(id) }, { $set: data }, { upsert: true })
     return result.upsertedId || id
+  }
+
+  async updatePush (collection, id, data) {
+    const db = await this.connect()
+    const result = db.collection(collection).updateOne({ _id: ObjectId(id) }, { $push: data })
+    return result
   }
 
   async delete (collection, id) {

@@ -4,7 +4,6 @@ import helmet from 'helmet'
 import morgan from 'morgan'
 import cors from 'cors'
 
-process.env.TZ = 'America/Lima';
 const app = express()
 app.use(morgan('dev'))
 app.use(helmet())

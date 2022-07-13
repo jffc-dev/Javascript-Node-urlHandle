@@ -39,6 +39,13 @@ class MongoUrlRepository {
     const urls = await this.mongoDB.getRandom(this.collection, size)
     return { urls }
   }
+
+  async addTitle (id, title, field) {
+    const {titles} = await this.mongoDB.get(this.collection, id)
+    const newId = titles ? Math.max(...titles.map(o => o._id), 0) + 1 : 1
+    const url = await this.mongoDB.updatePush(this.collection, id, {"titles": {"_id":newId,"title": title,"audi_createdDate": new Date()}})
+    return { url }
+  }
 }
 
 export default MongoUrlRepository
