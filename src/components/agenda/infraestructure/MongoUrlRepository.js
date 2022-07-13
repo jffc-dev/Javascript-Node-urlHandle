@@ -26,8 +26,8 @@ class MongoUrlRepository {
   }
 
   async get (id) {
-    const person = await this.mongoDB.get(this.collection, id)
-    return { person }
+    const url = await this.mongoDB.get(this.collection, id)
+    return { url }
   }
 
   async getAll () {
