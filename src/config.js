@@ -6,6 +6,6 @@ export const config = {
   port: process.env.PORT || 3000,
   mongo: {
     uri: 'mongodb://127.0.0.1:27017/',
-    db: 'manejoCadenas_QA'
+    db: 'manejoCadenas'
   }
 }

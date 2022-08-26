@@ -76,7 +76,7 @@ export const obtenerUrlsRandom = async (req, res, next) => {
     const query = ObtenerUrlsRandom({ UrlRepository })
     const urls = await query({size: req.params.size})
     res.status(201).json({
-      urls
+      ...urls
     })
   } catch (e) {
     next(e)
