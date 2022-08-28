@@ -4,9 +4,13 @@ import CrearVariasUrls from './application/crearVariasUrls.js'
 import EliminarUrl from './application/eliminarUrl.js'
 import ObtenerUnaUrl from './application/obtenerUnaUrl.js'
 import ObtenerUrls from './application/obtenerUrls.js'
-import ObtenerUrlsRandom from './application/ObtenerUrlsRandom.js'
+import ObtenerUrlsRandom from './application/obtenerUrlsRandom.js'
 import ObtenerContenidoUrl from './application/obtenerContenidoUrl.js'
 import AgregarTituloUrl from './application/agregarTituloUrl.js'
+import ReestablecerUrl from './application/restablecerUrl.js'
+
+import {resetUrlModel} from './model/urlValidation.js'
+import {StatusValidation} from './model/validation.js'
 
 const UrlRepository = new MongoUrlRepository()
 
@@ -102,10 +106,34 @@ export const obtenerContenidoUrl = async (req, res, next) => {
 export const agregarTituloUrl = async (req, res, next) => {
   try {
     const query = AgregarTituloUrl({ UrlRepository })
-    const result = await query({id: req.params.id, title: req.body.title, field: {_id:0, titles: 1}})
+    const result = await query({id: req.params.id, title: req.body.title})
     res.status(201).json({
       ...result
     })
+  } catch (e) {
+    next(e)
+  }
+}
+
+
+export const reestablecerUrl = async (req, res, next) => {
+  try {
+    const query = ReestablecerUrl({ UrlRepository })
+    const statusValidation = new StatusValidation(null, "")
+    const data = new resetUrlModel(req.params.id, req.body.newUrl)
+
+    if(data.validModel(statusValidation)){
+      const result = await query(data)
+      res.status(201).json({
+        ...result
+      })
+    }else{
+      res.status(201).json({
+        status: statusValidation.status ? 1 : 0,
+        msg: statusValidation.msg
+      })
+    }
+    
   } catch (e) {
     next(e)
   }

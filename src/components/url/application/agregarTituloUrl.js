@@ -4,8 +4,8 @@
  */
 
  export default ({ UrlRepository }) => {
-    return async ({ size }) => {
-      return await UrlRepository.getRandom(size)
+    return async ({ id, title }) => {
+      return await UrlRepository.addTitle(id, title)
     }
   }
   

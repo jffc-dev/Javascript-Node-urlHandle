@@ -40,7 +40,7 @@ class MongoUrlRepository {
     return { urls }
   }
 
-  async addTitle (id, title, field) {
+  async addTitle (id, title) {
     const responseGet = await this.mongoDB.get(this.collection, id)
     
     if(responseGet){
@@ -52,6 +52,30 @@ class MongoUrlRepository {
       return {
         status: result.ok = 1 ? 1 : 0,
         msg: result.ok = 1 ? 'Se agregó el título correctamente.' : 'No se encontró la url.',
+        rpta: newObj
+      }
+
+    }else{
+      return {
+        status: 0,
+        msg: 'No se encontró la url.',
+        rpta: ''
+      }
+    }
+  }
+
+  async addReset (id, newUrl) {
+    const responseGet = await this.mongoDB.get(this.collection, id)
+    
+    if(responseGet){
+      const {resets} = responseGet
+      const newId = resets ? Math.max(...resets.map(o => o._id), 0) + 1 : 1
+      const newObj = {"_id":newId,"url": newUrl,"audi_createdDate": new Date()}
+      const {result} = await this.mongoDB.updatePush(this.collection, id, {"resets": newObj})
+
+      return {
+        status: result.ok = 1 ? 1 : 0,
+        msg: result.ok = 1 ? 'Se reestableció la url correctamente.' : 'No se encontró la url.',
         rpta: newObj
       }
 

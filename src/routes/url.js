@@ -1,8 +1,8 @@
 import express from 'express'
 import { persons } from '../utils/mockups.js'
-import { crearUrl, eliminarUrl, obtenerUnaUrl, obtenerUrls, obtenerUrlsRandom, crearVariasUrls, obtenerContenidoUrl, agregarTituloUrl } from '../components/agenda/controller.js'
+import { crearUrl, eliminarUrl, obtenerUnaUrl, obtenerUrls, obtenerUrlsRandom, crearVariasUrls, obtenerContenidoUrl, agregarTituloUrl, reestablecerUrl } from '../components/url/controller.js'
 import validationHandler from '../utils/middlewares/validationHandler.js'
-import { createUrlSchema } from '../components/agenda/domain/add.js'
+import { createUrlSchema } from '../components/url/domain/add.js'
 
 const router = express.Router()
 
@@ -30,5 +30,7 @@ router.post('/api/urls/', crearVariasUrls)
 router.post('/api/urls/cargar', obtenerContenidoUrl)
 
 router.patch('/api/urls/add-title/:id', agregarTituloUrl)
+
+router.patch('/api/urls/add-reset/:id', reestablecerUrl)
 
 export default router
