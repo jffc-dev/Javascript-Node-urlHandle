@@ -58,7 +58,7 @@ export const obtenerUnaUrl = async (req, res, next) => {
     const query = ObtenerUnaUrl({ UrlRepository })
     const url = await query({"id": req.params.id})
     res.status(201).json({
-      url
+      ...url
     })
   } catch (e) {
     next(e)
