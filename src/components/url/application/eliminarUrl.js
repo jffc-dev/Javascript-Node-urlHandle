@@ -3,8 +3,8 @@
  * @param {import('../infraestructure/MongoPersonRepository')} obj.PersonRepository
  */
 
-export default ({ PersonRepository }) => {
+export default ({ UrlRepository }) => {
   return async ({ id }) => {
-    return await PersonRepository.delete(id)
+    return await UrlRepository.delete(id)
   }
 }
