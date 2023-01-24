@@ -60,7 +60,7 @@ class MongoLib {
 
   async update (collection, id, data) {
     const db = await this.connect()
-    const result = db.collection(collection).updateOne({ _id: ObjectId(id) }, { $set: data }, { upsert: true })
+    const result = db.collection(collection).updateOne({ _id: ObjectId(id) }, { $set: data })
     return result.upsertedId || id
   }
 
@@ -77,10 +77,10 @@ class MongoLib {
   }
 
   async getRandom (collection, size) {
-    const db = await this.connect();
+    const db = await this.connect()
     return db.collection(collection).aggregate([
-        { $sample: { size: parseInt(size) } }
-    ]).toArray();
+      { $sample: { size: parseInt(size) } }
+    ]).toArray()
   }
 }
 
