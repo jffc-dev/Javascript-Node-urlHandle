@@ -13,7 +13,7 @@ app.use(express.json())
 app.use('/', apiUrlHandle)
 
 app.use((req, res, next) => {
-  res.status(404).send(JSON.stringify({res: "La URL a la que intenta acceder no existe"}))
+  res.status(404).send(JSON.stringify({ res: 'La URL a la que intenta acceder no existe' }))
 })
 
 const PORT = process.env.PORT || 3000

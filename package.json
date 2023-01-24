@@ -5,8 +5,8 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon --es-module-specifier-resolution=node src/index.js",
+    "start": "set PORT=3000 && node src/index.js",
+    "dev": "set PORT=3001 && nodemon --es-module-specifier-resolution=node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Javier Flores",
