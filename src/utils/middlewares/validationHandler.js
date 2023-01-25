@@ -1,6 +1,3 @@
-import createError from 'http-errors'
-import { config } from '../../config.js'
-
 /**
  * @param {object} data
  * @param {import('joi').Schema schema}
@@ -12,10 +9,16 @@ const validate = (data, schema) => {
 }
 
 const validationHandler = (schema, check = 'body') => {
-  return (req, _, next) => {
+  return (req, res, next) => {
     const err = validate(req[check], schema)
     if (err) {
-      next(createError.BadRequest(config.dev ? err : null))
+      const { details: [error] } = err
+      const { type, context } = error
+      res.status(406).json({
+        status: 0,
+        msg: { type, context },
+        rpta: null
+      })
     } else {
       next()
     }
