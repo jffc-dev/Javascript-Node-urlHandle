@@ -9,8 +9,8 @@ import ObtenerContenidoUrl from './application/obtenerContenidoUrl.js'
 import AgregarTituloUrl from './application/agregarTituloUrl.js'
 import ReestablecerUrl from './application/restablecerUrl.js'
 
-import {resetUrlModel} from './model/urlValidation.js'
-import {StatusValidation} from './model/validation.js'
+import { ResetUrlModel } from './model/urlValidation.js'
+import { StatusValidation } from './model/validation.js'
 
 const UrlRepository = new MongoUrlRepository()
 
@@ -56,7 +56,7 @@ export const eliminarUrl = async (req, res, next) => {
 export const obtenerUnaUrl = async (req, res, next) => {
   try {
     const query = ObtenerUnaUrl({ UrlRepository })
-    const url = await query({"id": req.params.id})
+    const url = await query({ id: req.params.id })
     res.status(201).json({
       ...url
     })
@@ -78,7 +78,7 @@ export const obtenerUrls = async (req, res, next) => {
 export const obtenerUrlsRandom = async (req, res, next) => {
   try {
     const query = ObtenerUrlsRandom({ UrlRepository })
-    const urls = await query({size: req.params.size})
+    const urls = await query({ size: req.params.size })
     res.status(201).json({
       ...urls
     })
@@ -87,13 +87,12 @@ export const obtenerUrlsRandom = async (req, res, next) => {
   }
 }
 
-
 export const obtenerContenidoUrl = async (req, res, next) => {
   try {
     const queryGet = ObtenerUnaUrl({ UrlRepository })
-    const {url: urlFound} = await queryGet({"id": req.body.id})
+    const { url: urlFound } = await queryGet({ id: req.body.id })
     const query = ObtenerContenidoUrl({ UrlRepository })
-    const contenido = await query({url: urlFound.url})
+    const contenido = await query({ url: urlFound.url })
     res.status(201).json({
       contenido
     })
@@ -102,11 +101,10 @@ export const obtenerContenidoUrl = async (req, res, next) => {
   }
 }
 
-
 export const agregarTituloUrl = async (req, res, next) => {
   try {
     const query = AgregarTituloUrl({ UrlRepository })
-    const result = await query({id: req.params.id, title: req.body.title})
+    const result = await query({ id: req.params.id, title: req.body.title })
     res.status(201).json({
       ...result
     })
@@ -115,25 +113,23 @@ export const agregarTituloUrl = async (req, res, next) => {
   }
 }
 
-
 export const reestablecerUrl = async (req, res, next) => {
   try {
     const query = ReestablecerUrl({ UrlRepository })
-    const statusValidation = new StatusValidation(null, "")
-    const data = new resetUrlModel(req.params.id, req.body.newUrl)
+    const statusValidation = new StatusValidation(null, '')
+    const data = new ResetUrlModel(req.params.id, req.body.newUrl)
 
-    if(data.validModel(statusValidation)){
+    if (data.validModel(statusValidation)) {
       const result = await query(data)
       res.status(201).json({
         ...result
       })
-    }else{
+    } else {
       res.status(201).json({
         status: statusValidation.status ? 1 : 0,
         msg: statusValidation.msg
       })
     }
-    
   } catch (e) {
     next(e)
   }

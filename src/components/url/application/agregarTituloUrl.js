@@ -3,9 +3,8 @@
  * @param {import('../infraestructure/MongoUrlRepository')} obj.UrlRepository
  */
 
- export default ({ UrlRepository }) => {
-    return async ({ id, title }) => {
-      return await UrlRepository.addTitle(id, title)
-    }
+export default ({ UrlRepository }) => {
+  return async ({ id, title }) => {
+    return await UrlRepository.addTitle(id, title)
   }
-  
+}

@@ -4,7 +4,7 @@
  */
 
 export default ({ UrlRepository }) => {
-    return async ({ id, newUrl }) => {
-        return await UrlRepository.addReset(id, newUrl)
-    }
+  return async ({ id, newUrl }) => {
+    return await UrlRepository.addReset(id, newUrl)
+  }
 }
