@@ -47,8 +47,7 @@ class MongoLib {
 
   async create (collection, data) {
     const db = await this.connect()
-    const result = await db.collection(collection).insertOne(data)
-    delete data._id
+    const result = await db.collection(collection).insertOne({ ...data, audi_createdDate: new Date() })
     return result.insertedId
   }
 
