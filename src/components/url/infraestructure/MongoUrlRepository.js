@@ -40,6 +40,11 @@ class MongoUrlRepository {
     return { urls }
   }
 
+  async getNewExcept (except, size) {
+    const urls = await this.mongoDB.getNewExcept(this.collection, except, size)
+    return { urls }
+  }
+
   async addTitle (id, title) {
     const responseGet = await this.mongoDB.get(this.collection, id)
 
