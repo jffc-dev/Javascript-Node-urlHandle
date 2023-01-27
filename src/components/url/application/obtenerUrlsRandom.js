@@ -8,4 +8,3 @@ export default ({ UrlRepository }) => {
     return await UrlRepository.getRandom(size)
   }
 }
-  
