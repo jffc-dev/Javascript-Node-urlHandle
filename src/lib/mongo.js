@@ -81,6 +81,14 @@ class MongoLib {
       { $sample: { size: parseInt(size) } }
     ]).toArray()
   }
+
+  async getNewExcept (collection, except, size) {
+    const db = await this.connect()
+    return db.collection(collection).aggregate([
+      { $match: { _id: { $nin: except.map((url) => { return ObjectId(url) }) } } },
+      { $sample: { size: parseInt(size) } }
+    ]).toArray()
+  }
 }
 
 export default MongoLib

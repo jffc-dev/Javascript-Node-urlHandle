@@ -8,7 +8,8 @@ import {
   crearVariasUrls,
   obtenerContenidoUrl,
   agregarTituloUrl,
-  reestablecerUrl
+  reestablecerUrl,
+  getNewUrl
 } from '../components/url/controller.js'
 import validationHandler from '../utils/middlewares/validationHandler.js'
 import { createUrlSchema } from '../components/url/domain/add.js'
@@ -23,7 +24,7 @@ router.get('/api/urls-random/:size', obtenerUrlsRandom)
 
 router.delete('/api/urls/:id', eliminarUrl)
 
-router.post('/api/url/', validationHandler(createUrlSchema), crearUrl)
+router.post('/api/urls/get-new-url/', getNewUrl)
 
 router.post('/api/urls/', crearVariasUrls)
 
@@ -32,5 +33,7 @@ router.post('/api/urls/cargar', obtenerContenidoUrl)
 router.patch('/api/urls/add-title/:id', agregarTituloUrl)
 
 router.patch('/api/urls/add-reset/:id', reestablecerUrl)
+
+router.post('/api/url/', validationHandler(createUrlSchema), crearUrl)
 
 export default router
