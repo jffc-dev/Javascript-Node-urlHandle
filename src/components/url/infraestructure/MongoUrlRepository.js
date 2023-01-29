@@ -70,25 +70,16 @@ class MongoUrlRepository {
   }
 
   async addReset (id, newUrl) {
-    const responseGet = await this.mongoDB.get(this.collection, id)
-
+    let responseGet = await this.mongoDB.get(this.collection, id)
     if (responseGet) {
       const { resets } = responseGet
       const newId = resets ? Math.max(...resets.map(o => o._id), 0) + 1 : 1
       const newObj = { _id: newId, url: newUrl, audi_createdDate: new Date() }
-      const { result } = await this.mongoDB.updatePush(this.collection, id, { resets: newObj })
-      const rpta = {
-        status: result.ok === 1 ? 1 : 0,
-        msg: result.ok === 1 ? 'Se reestableció la url correctamente.' : 'No se encontró la url.',
-        rpta: newObj
-      }
-      return rpta
+      await this.mongoDB.updatePush(this.collection, id, { resets: newObj })
+      responseGet = await this.mongoDB.get(this.collection, id)
+      return responseGet
     } else {
-      return {
-        status: 0,
-        msg: 'No se encontró la url.',
-        rpta: ''
-      }
+      return null
     }
   }
 }
