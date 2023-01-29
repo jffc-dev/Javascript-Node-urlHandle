@@ -12,7 +12,7 @@ import ReestablecerUrl from './application/restablecerUrl.js'
 import { AppResponse } from '../../utils/general.js'
 
 import { ResetUrlModel } from './model/urlValidation.js'
-import { StatusValidation } from './model/validation.js'
+// import { StatusValidation } from './model/validation.js'
 
 const UrlRepository = new MongoUrlRepository()
 
@@ -70,10 +70,12 @@ export const obtenerUnaUrl = async (req, res, next) => {
 export const obtenerUrls = async (req, res, next) => {
   try {
     const query = ObtenerUrls({ UrlRepository })
-    const urls = await query()
-    res.status(201).json(urls)
+    const { urls } = await query()
+    const rsp = new AppResponse(1, 'Url was successfully loaded.', urls)
+    res.status(201).json(rsp)
   } catch (e) {
-    next(e)
+    const rsp = new AppResponse(0, 'An error occurred in the process. ' + e.toString(), null)
+    res.status(201).json(rsp)
   }
 }
 
@@ -95,11 +97,11 @@ export const obtenerContenidoUrl = async (req, res, next) => {
     const { url: urlFound } = await queryGet({ id: req.body.id })
     const query = ObtenerContenidoUrl({ UrlRepository })
     const contenido = await query({ url: urlFound.url })
-    res.status(201).json({
-      contenido
-    })
+    const rsp = new AppResponse(1, 'Url was successfully loaded.', { id: req.body.id, ...contenido })
+    res.status(201).json(rsp)
   } catch (e) {
-    next(e)
+    const rsp = new AppResponse(0, 'An error occurred in the process.', { error: e.toString() })
+    res.status(201).json(rsp)
   }
 }
 
@@ -115,25 +117,23 @@ export const agregarTituloUrl = async (req, res, next) => {
   }
 }
 
-export const reestablecerUrl = async (req, res, next) => {
+export const restoredUrl = async (req, res, _) => {
   try {
     const query = ReestablecerUrl({ UrlRepository })
-    const statusValidation = new StatusValidation(null, '')
+    // const statusValidation = new StatusValidation(null, '')
     const data = new ResetUrlModel(req.params.id, req.body.newUrl)
 
-    if (data.validModel(statusValidation)) {
-      const result = await query(data)
-      res.status(201).json({
-        ...result
-      })
+    const result = await query(data)
+    if (result) {
+      const rsp = new AppResponse(1, 'Url was successfully restored.', { ...result })
+      res.status(201).json(rsp)
     } else {
-      res.status(201).json({
-        status: statusValidation.status ? 1 : 0,
-        msg: statusValidation.msg
-      })
+      const rsp = new AppResponse(0, 'Url not found.', { })
+      res.status(404).json(rsp)
     }
   } catch (e) {
-    next(e)
+    const rsp = new AppResponse(0, 'An error occurred in the process. ' + e.toString(), null)
+    res.status(201).json(rsp)
   }
 }
 
