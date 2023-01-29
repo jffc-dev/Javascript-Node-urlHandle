@@ -8,7 +8,7 @@ import {
   crearVariasUrls,
   obtenerContenidoUrl,
   agregarTituloUrl,
-  reestablecerUrl,
+  restoredUrl,
   getNewUrl
 } from '../components/url/controller.js'
 import validationHandler from '../utils/middlewares/validationHandler.js'
@@ -16,7 +16,7 @@ import { createUrlSchema } from '../components/url/domain/add.js'
 
 const router = express.Router()
 
-router.get('/api/urls', obtenerUrls)
+router.get('/api/url', obtenerUrls)
 
 router.get('/api/urls/:id', obtenerUnaUrl)
 
@@ -32,7 +32,7 @@ router.post('/api/urls/cargar', obtenerContenidoUrl)
 
 router.patch('/api/urls/add-title/:id', agregarTituloUrl)
 
-router.patch('/api/urls/add-reset/:id', reestablecerUrl)
+router.patch('/api/url/add-reset/:id', restoredUrl)
 
 router.post('/api/url/', validationHandler(createUrlSchema), crearUrl)
 
