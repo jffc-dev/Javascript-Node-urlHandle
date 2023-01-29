@@ -1,28 +1,43 @@
 import axios from 'axios'
+import puppeteer from 'puppeteer'
+import * as cheerio from 'cheerio'
+
+const loadData = async (url) => {
+  const browser = await puppeteer.launch()
+  const page = await browser.newPage()
+  await page.goto(url)
+  const data = await page.content()
+  await browser.close()
+  return data
+}
 
 export default () => {
-    return async ({ url }) => {
-        let contenido = ""
-        let titulo = ""
-        await axios.get(url)
-        .then(function (response) {
-            // handle success
-            contenido = response.data;
-            titulo = contenido.substring(contenido.toLowerCase().indexOf("<title>"),
-            contenido.toLowerCase().indexOf("</title>"))
-          })
-          .catch(function (error) {
-            // handle error
-            console.log(error);
-            console.log('3');
-          })
-          .then(function () {
-            console.log('34');
-          });
-        return {
-          url,
-          contenido,
-          "titulo": titulo.substring(7, titulo.length).trim()
-        };
+  return async ({ url }) => {
+    let bodyTitle = ''
+    let $ = null
+    const bodyAxios = await axios.get(url)
+      .then((response) => {
+        return response.data
+      })
+      .catch((error) => {
+        console.log(error)
+        return null
+      })
+
+    if (bodyAxios) {
+      $ = cheerio.load(bodyAxios)
+      bodyTitle = $('title').text()
     }
+
+    if (bodyTitle === '') {
+      const bodyPuppeteer = await loadData(url)
+      $ = cheerio.load(bodyPuppeteer)
+      bodyTitle = $('title').text()
+    }
+
+    return {
+      url,
+      titulo: bodyTitle
+    }
+  }
 }
