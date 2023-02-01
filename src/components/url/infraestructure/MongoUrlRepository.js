@@ -14,15 +14,16 @@ class MongoUrlRepository {
   async addMany (urls) {
     const urlsArray = urls.split('\n')
 
-    const rpta = await this.mongoDB.createMany(this.collection, urlsArray.map(function (cadena) {
+    const { ops: rpta } = await this.mongoDB.createMany(this.collection, urlsArray.map(function (cadena) {
       return { url: cadena, audi_createdDate: new Date() }
     }))
-    return { rpta }
+
+    return rpta
   }
 
-  async delete (id, query) {
-    const idx = await this.mongoDB.update(this.collection, id)
-    return { idx }
+  async delete (id) {
+    const result = await this.mongoDB.delete(this.collection, id)
+    return result
   }
 
   async get (id) {
