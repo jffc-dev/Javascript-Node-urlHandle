@@ -29,29 +29,32 @@ export const crearUrl = async (req, res, next) => {
   }
 }
 
-export const crearVariasUrls = async (req, res, next) => {
+export const createMultipleUrl = async (req, res, _) => {
   try {
     const query = CrearVariasUrls({ UrlRepository })
-    const rpta = await query(req.body)
-    res.status(201).json({
-      rpta,
-      message: 'Url Creada Exitosamente'
-    })
+    const urls = await query(req.body)
+    const rsp = new AppResponse(1, 'Urls were successfully created.', urls)
+    res.status(201).json(rsp)
   } catch (e) {
-    next(e)
+    const rsp = new AppResponse(0, 'An error occurred in the process. ' + e.toString(), null)
+    res.status(201).json(rsp)
   }
 }
 
-export const eliminarUrl = async (req, res, next) => {
+export const deleteUrlById = async (req, res, _) => {
   try {
     const query = EliminarUrl({ UrlRepository })
-    const id = await query(req.params.id)
-    res.status(201).json({
-      id,
-      message: 'Url Eliminada Exitosamente'
-    })
+    const { deletedCount, id } = await query({ id: req.params.id })
+    if (deletedCount > 0) {
+      const rsp = new AppResponse(1, 'Url was successfully deleted.', id)
+      res.status(201).json(rsp)
+    } else {
+      const rsp = new AppResponse(0, 'Url not found.', { })
+      res.status(404).json(rsp)
+    }
   } catch (e) {
-    next(e)
+    const rsp = new AppResponse(0, 'An error occurred in the process. ' + e.toString(), null)
+    res.status(201).json(rsp)
   }
 }
 
