@@ -13,7 +13,7 @@ app.use(helmet())
 app.use(cors())
 
 app.use(express.json())
-app.use('/', apiUrlHandle) // TODO - Fix main route for urls
+app.use('/api/url/', apiUrlHandle)
 app.use('/api/playlist/', apiPlaylistHandle)
 
 app.use((req, res, next) => {
