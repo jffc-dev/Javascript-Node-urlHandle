@@ -1,11 +1,11 @@
 import express from 'express'
 import {
   crearUrl,
-  eliminarUrl,
+  deleteUrlById,
   obtenerUnaUrl,
   obtenerUrls,
   obtenerUrlsRandom,
-  crearVariasUrls,
+  createMultipleUrl,
   obtenerContenidoUrl,
   agregarTituloUrl,
   restoredUrl,
@@ -16,24 +16,24 @@ import { createUrlSchema } from '../components/url/domain/add.js'
 
 const router = express.Router()
 
-router.get('/api/url', obtenerUrls)
+router.get('/', obtenerUrls)
 
-router.get('/api/urls/:id', obtenerUnaUrl)
+router.get('/:id', obtenerUnaUrl)
 
-router.get('/api/urls-random/:size', obtenerUrlsRandom)
+router.get('/random/:size', obtenerUrlsRandom)
 
-router.delete('/api/urls/:id', eliminarUrl)
+router.delete('/:id', deleteUrlById)
 
-router.post('/api/urls/get-new-url/', getNewUrl)
+router.post('/get-new-url/', getNewUrl)
 
-router.post('/api/urls/', crearVariasUrls)
+router.post('/multiple/', createMultipleUrl)
 
-router.post('/api/urls/cargar', obtenerContenidoUrl)
+router.post('/load/', obtenerContenidoUrl)
 
-router.patch('/api/urls/add-title/:id', agregarTituloUrl)
+router.patch('/add-title/:id', agregarTituloUrl)
 
-router.patch('/api/url/add-reset/:id', restoredUrl)
+router.patch('/add-reset/:id', restoredUrl)
 
-router.post('/api/url/', validationHandler(createUrlSchema), crearUrl)
+router.post('/', validationHandler(createUrlSchema), crearUrl)
 
 export default router
