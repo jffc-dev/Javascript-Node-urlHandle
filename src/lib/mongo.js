@@ -71,8 +71,8 @@ class MongoLib {
 
   async delete (collection, id) {
     const db = await this.connect()
-    await db.collection(collection).deleteOne({ _id: ObjectId(id) })
-    return id
+    const { deletedCount } = await db.collection(collection).deleteOne({ _id: ObjectId(id) })
+    return { deletedCount, id }
   }
 
   async getRandom (collection, size) {
