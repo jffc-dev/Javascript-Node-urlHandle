@@ -140,13 +140,14 @@ export const restoredUrl = async (req, res, _) => {
   }
 }
 
-export const getNewUrl = async (req, res, next) => {
+export const getNewUrl = async (req, res) => {
   try {
     const query = GetNewUrlRepo({ UrlRepository })
     const { urls } = await query(req.body)
     const rsp = new AppResponse(1, 'Url(s) were successfully listed.', urls)
     res.status(201).json(rsp)
   } catch (e) {
-    next(e)
+    const rsp = new AppResponse(0, 'An error occurred in the process. ' + e.toString(), null)
+    res.status(201).json(rsp)
   }
 }
