@@ -37,7 +37,7 @@ export const createMultipleUrl = async (req, res, _) => {
     res.status(201).json(rsp)
   } catch (e) {
     const rsp = new AppResponse(0, 'An error occurred in the process. ' + e.toString(), null)
-    res.status(201).json(rsp)
+    res.status(500).json(rsp)
   }
 }
 
@@ -54,7 +54,7 @@ export const deleteUrlById = async (req, res, _) => {
     }
   } catch (e) {
     const rsp = new AppResponse(0, 'An error occurred in the process. ' + e.toString(), null)
-    res.status(201).json(rsp)
+    res.status(500).json(rsp)
   }
 }
 
@@ -78,7 +78,7 @@ export const obtenerUrls = async (_, res) => {
     res.status(201).json(rsp)
   } catch (e) {
     const rsp = new AppResponse(0, 'An error occurred in the process. ' + e.toString(), null)
-    res.status(201).json(rsp)
+    res.status(500).json(rsp)
   }
 }
 
@@ -90,7 +90,7 @@ export const obtenerUrlsRandom = async (req, res) => {
     res.status(201).json(rsp)
   } catch (e) {
     const rsp = new AppResponse(0, 'An error occurred in the process. ' + e.toString(), null)
-    res.status(201).json(rsp)
+    res.status(500).json(rsp)
   }
 }
 
@@ -104,7 +104,7 @@ export const obtenerContenidoUrl = async (req, res, next) => {
     res.status(201).json(rsp)
   } catch (e) {
     const rsp = new AppResponse(0, 'An error occurred in the process.', { error: e.toString() })
-    res.status(201).json(rsp)
+    res.status(500).json(rsp)
   }
 }
 
@@ -121,7 +121,7 @@ export const addTitleToUrl = async (req, res) => {
     }
   } catch (e) {
     const rsp = new AppResponse(0, 'An error occurred in the process. ' + e.toString(), null)
-    res.status(201).json(rsp)
+    res.status(500).json(rsp)
   }
 }
 
@@ -141,7 +141,7 @@ export const restoredUrl = async (req, res, _) => {
     }
   } catch (e) {
     const rsp = new AppResponse(0, 'An error occurred in the process. ' + e.toString(), null)
-    res.status(201).json(rsp)
+    res.status(500).json(rsp)
   }
 }
 
@@ -153,6 +153,6 @@ export const getNewUrl = async (req, res) => {
     res.status(201).json(rsp)
   } catch (e) {
     const rsp = new AppResponse(0, 'An error occurred in the process. ' + e.toString(), null)
-    res.status(201).json(rsp)
+    res.status(500).json(rsp)
   }
 }
