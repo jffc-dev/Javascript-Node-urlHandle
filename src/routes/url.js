@@ -7,7 +7,7 @@ import {
   obtenerUrlsRandom,
   createMultipleUrl,
   obtenerContenidoUrl,
-  agregarTituloUrl,
+  addTitleToUrl,
   restoredUrl,
   getNewUrl
 } from '../components/url/controller.js'
@@ -30,7 +30,7 @@ router.post('/multiple/', createMultipleUrl)
 
 router.post('/load/', obtenerContenidoUrl)
 
-router.patch('/add-title/:id', agregarTituloUrl)
+router.patch('/add-title/:id', addTitleToUrl)
 
 router.patch('/add-reset/:id', restoredUrl)
 

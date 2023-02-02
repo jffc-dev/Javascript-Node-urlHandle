@@ -108,15 +108,20 @@ export const obtenerContenidoUrl = async (req, res, next) => {
   }
 }
 
-export const agregarTituloUrl = async (req, res, next) => {
+export const addTitleToUrl = async (req, res) => {
   try {
     const query = AgregarTituloUrl({ UrlRepository })
     const result = await query({ id: req.params.id, title: req.body.title })
-    res.status(201).json({
-      ...result
-    })
+    if (result) {
+      const rsp = new AppResponse(1, 'Url was successfully restored.', { ...result })
+      res.status(201).json(rsp)
+    } else {
+      const rsp = new AppResponse(0, 'Url not found.', { })
+      res.status(404).json(rsp)
+    }
   } catch (e) {
-    next(e)
+    const rsp = new AppResponse(0, 'An error occurred in the process. ' + e.toString(), null)
+    res.status(201).json(rsp)
   }
 }
 
