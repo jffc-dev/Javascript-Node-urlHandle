@@ -70,7 +70,7 @@ export const obtenerUnaUrl = async (req, res, next) => {
   }
 }
 
-export const obtenerUrls = async (req, res, next) => {
+export const obtenerUrls = async (_, res) => {
   try {
     const query = ObtenerUrls({ UrlRepository })
     const { urls } = await query()
@@ -82,15 +82,15 @@ export const obtenerUrls = async (req, res, next) => {
   }
 }
 
-export const obtenerUrlsRandom = async (req, res, next) => {
+export const obtenerUrlsRandom = async (req, res) => {
   try {
     const query = ObtenerUrlsRandom({ UrlRepository })
-    const urls = await query({ size: req.params.size })
-    res.status(201).json({
-      ...urls
-    })
+    const { urls } = await query({ size: req.params.size })
+    const rsp = new AppResponse(1, 'Url was successfully loaded.', urls)
+    res.status(201).json(rsp)
   } catch (e) {
-    next(e)
+    const rsp = new AppResponse(0, 'An error occurred in the process. ' + e.toString(), null)
+    res.status(201).json(rsp)
   }
 }
 
