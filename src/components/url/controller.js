@@ -29,19 +29,18 @@ export const crearUrl = async (req, res, next) => {
   }
 }
 
-export const createMultipleUrl = async (req, res, _) => {
+export const createMultipleUrl = async (req, res, next) => {
   try {
     const query = CrearVariasUrls({ UrlRepository })
     const urls = await query(req.body)
     const rsp = new AppResponse(1, 'Urls were successfully created.', urls)
     res.status(201).json(rsp)
   } catch (e) {
-    const rsp = new AppResponse(0, 'An error occurred in the process. ' + e.toString(), null)
-    res.status(500).json(rsp)
+    next(e)
   }
 }
 
-export const deleteUrlById = async (req, res, _) => {
+export const deleteUrlById = async (req, res, next) => {
   try {
     const query = EliminarUrl({ UrlRepository })
     const { deletedCount, id } = await query({ id: req.params.id })
@@ -53,8 +52,7 @@ export const deleteUrlById = async (req, res, _) => {
       res.status(404).json(rsp)
     }
   } catch (e) {
-    const rsp = new AppResponse(0, 'An error occurred in the process. ' + e.toString(), null)
-    res.status(500).json(rsp)
+    next(e)
   }
 }
 
@@ -70,27 +68,25 @@ export const obtenerUnaUrl = async (req, res, next) => {
   }
 }
 
-export const obtenerUrls = async (_, res) => {
+export const obtenerUrls = async (_, res, next) => {
   try {
     const query = ObtenerUrls({ UrlRepository })
     const { urls } = await query()
     const rsp = new AppResponse(1, 'Url was successfully loaded.', urls)
     res.status(201).json(rsp)
   } catch (e) {
-    const rsp = new AppResponse(0, 'An error occurred in the process. ' + e.toString(), null)
-    res.status(500).json(rsp)
+    next(e)
   }
 }
 
-export const obtenerUrlsRandom = async (req, res) => {
+export const obtenerUrlsRandom = async (req, res, next) => {
   try {
     const query = ObtenerUrlsRandom({ UrlRepository })
     const { urls } = await query({ size: req.params.size })
     const rsp = new AppResponse(1, 'Url was successfully loaded.', urls)
     res.status(201).json(rsp)
   } catch (e) {
-    const rsp = new AppResponse(0, 'An error occurred in the process. ' + e.toString(), null)
-    res.status(500).json(rsp)
+    next(e)
   }
 }
 
@@ -103,12 +99,11 @@ export const obtenerContenidoUrl = async (req, res, next) => {
     const rsp = new AppResponse(1, 'Url was successfully loaded.', { id: req.body.id, ...contenido })
     res.status(201).json(rsp)
   } catch (e) {
-    const rsp = new AppResponse(0, 'An error occurred in the process.', { error: e.toString() })
-    res.status(500).json(rsp)
+    next(e)
   }
 }
 
-export const addTitleToUrl = async (req, res) => {
+export const addTitleToUrl = async (req, res, next) => {
   try {
     const query = AgregarTituloUrl({ UrlRepository })
     const result = await query({ id: req.params.id, title: req.body.title })
@@ -120,12 +115,11 @@ export const addTitleToUrl = async (req, res) => {
       res.status(404).json(rsp)
     }
   } catch (e) {
-    const rsp = new AppResponse(0, 'An error occurred in the process. ' + e.toString(), null)
-    res.status(500).json(rsp)
+    next(e)
   }
 }
 
-export const restoredUrl = async (req, res, _) => {
+export const restoredUrl = async (req, res, next) => {
   try {
     const query = ReestablecerUrl({ UrlRepository })
     // const statusValidation = new StatusValidation(null, '')
@@ -140,19 +134,17 @@ export const restoredUrl = async (req, res, _) => {
       res.status(404).json(rsp)
     }
   } catch (e) {
-    const rsp = new AppResponse(0, 'An error occurred in the process. ' + e.toString(), null)
-    res.status(500).json(rsp)
+    next(e)
   }
 }
 
-export const getNewUrl = async (req, res) => {
+export const getNewUrl = async (req, res, next) => {
   try {
     const query = GetNewUrlRepo({ UrlRepository })
     const { urls } = await query(req.body)
     const rsp = new AppResponse(1, 'Url(s) were successfully listed.', urls)
     res.status(201).json(rsp)
   } catch (e) {
-    const rsp = new AppResponse(0, 'An error occurred in the process. ' + e.toString(), null)
-    res.status(500).json(rsp)
+    next(e)
   }
 }
