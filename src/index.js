@@ -6,6 +6,7 @@ import cors from 'cors'
 // Routes
 import apiUrlHandle from './routes/url.js'
 import apiPlaylistHandle from './routes/playlist.js'
+import { handleError, handleNotFound } from './routes/general.js'
 
 const app = express()
 app.use(morgan('dev'))
@@ -16,11 +17,9 @@ app.use(express.json())
 app.use('/api/url/', apiUrlHandle)
 app.use('/api/playlist/', apiPlaylistHandle)
 
-app.use((req, res, next) => {
-  res
-    .status(404)
-    .send(JSON.stringify({ res: 'La URL a la que intenta acceder no existe' }))
-})
+app.use(handleNotFound)
+
+app.use(handleError)
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
