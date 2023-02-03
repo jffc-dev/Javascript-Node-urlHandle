@@ -37,7 +37,7 @@ export default () => {
 
     return {
       url,
-      titulo: bodyTitle
+      title: bodyTitle
     }
   }
 }
