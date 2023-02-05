@@ -9,3 +9,8 @@ nssm set manejoCadenas AppDirectory D:\zPublicados\ManejoCadenasNode\ \
 nssm set manejoCadenas AppStdout D:\zPublicados\ManejoCadenasNode\logfiles\out.txt \
 nssm set manejoCadenas AppStderr D:\zPublicados\ManejoCadenasNode\logfiles\err.txt \
 nssm start manejoCadenas
+
+
+## Git ignore future changes
+git update-index --skip-worktree [filename]
+git update-index --no-skip-worktree [filename]
