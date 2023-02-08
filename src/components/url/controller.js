@@ -7,9 +7,11 @@ import ObtenerUnaUrl from './application/obtenerUnaUrl.js'
 import ObtenerUrls from './application/obtenerUrls.js'
 import ObtenerUrlsRandom from './application/obtenerUrlsRandom.js'
 import ObtenerContenidoUrl from './application/obtenerContenidoUrl.js'
+import GetUrlsPaginate from './application/getUrls.js'
+import CountUrls from './application/countUrls.js'
 import AgregarTituloUrl from './application/agregarTituloUrl.js'
 import ReestablecerUrl from './application/restablecerUrl.js'
-import { AppResponse } from '../../utils/general.js'
+import { AppResponse, AppResponseDataPaginated } from '../../utils/general.js'
 
 import { ResetUrlModel } from './model/urlValidation.js'
 // import { StatusValidation } from './model/validation.js'
@@ -143,6 +145,22 @@ export const getNewUrl = async (req, res, next) => {
     const query = GetNewUrlRepo({ UrlRepository })
     const { urls } = await query(req.body)
     const rsp = new AppResponse(1, 'Url(s) were successfully listed.', urls)
+    res.status(201).json(rsp)
+  } catch (e) {
+    next(e)
+  }
+}
+
+export const getUrlsPaginate = async (req, res, next) => {
+  try {
+    const { page, size } = req.query
+    const queryCou = CountUrls({ UrlRepository })
+    const { count } = await queryCou({ size, page })
+    const queryPag = GetUrlsPaginate({ UrlRepository })
+    const { urls } = await queryPag({ size, page })
+    const totalPages = Math.ceil(parseInt(count) / parseInt(size))
+    const data = new AppResponseDataPaginated(urls, count, totalPages, parseInt(page))
+    const rsp = new AppResponse(1, 'Url was successfully loaded.', data)
     res.status(201).json(rsp)
   } catch (e) {
     next(e)
