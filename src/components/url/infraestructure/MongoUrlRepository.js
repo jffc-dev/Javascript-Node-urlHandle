@@ -36,6 +36,13 @@ class MongoUrlRepository {
     return { urls }
   }
 
+  async getAllPaginate (page, size) {
+    const urls = await this.mongoDB.getAllPaginate(
+      this.collection, null, null, page, size
+    )
+    return { urls }
+  }
+
   async getRandom (size) {
     const urls = await this.mongoDB.getRandom(this.collection, size)
     return { urls }
