@@ -9,7 +9,8 @@ import {
   obtenerContenidoUrl,
   addTitleToUrl,
   restoredUrl,
-  getNewUrl
+  getNewUrl,
+  getUrlsPaginate
 } from '../components/url/controller.js'
 import validationHandler from '../utils/middlewares/validationHandler.js'
 import { createUrlSchema } from '../components/url/domain/add.js'
@@ -17,6 +18,8 @@ import { createUrlSchema } from '../components/url/domain/add.js'
 const router = express.Router()
 
 router.get('/', obtenerUrls)
+
+router.get('/v2/', getUrlsPaginate)
 
 router.get('/:id', obtenerUnaUrl)
 
