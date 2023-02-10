@@ -43,6 +43,11 @@ class MongoUrlRepository {
     return { urls }
   }
 
+  async countAll () {
+    const count = await this.mongoDB.countAll(this.collection)
+    return { count }
+  }
+
   async getRandom (size) {
     const urls = await this.mongoDB.getRandom(this.collection, size)
     return { urls }
