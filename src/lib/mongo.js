@@ -46,6 +46,11 @@ class MongoLib {
       .limit(nPerPage).toArray()
   }
 
+  async countAll (collection, query) {
+    const db = await this.connect()
+    return db.collection(collection).countDocuments(query)
+  }
+
   async get (collection, id, query = null) {
     const db = await this.connect()
     query = query || { _id: ObjectId(id) }
