@@ -39,6 +39,13 @@ class MongoLib {
     return db.collection(collection).find(query).toArray()
   }
 
+  async getAllPaginate (collection, query, sort, pageNumber, nPerPage) {
+    const db = await this.connect()
+    return db.collection(collection).find(query).sort({ _id: 1 })
+      .skip(pageNumber > 0 ? ((pageNumber - 1) * nPerPage) : 0)
+      .limit(nPerPage).toArray()
+  }
+
   async get (collection, id, query = null) {
     const db = await this.connect()
     query = query || { _id: ObjectId(id) }
