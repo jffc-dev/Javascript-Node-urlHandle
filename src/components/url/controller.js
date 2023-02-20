@@ -1,6 +1,6 @@
 import MongoUrlRepository from './infraestructure/MongoUrlRepository.js'
-import CrearUrl from './application/crearUrl.js'
-import CreateMultipleUrlRepo from './application/addMultipleUrl.js'
+import AddUrlRepo from './application/addUrl.js'
+import AddMultipleUrlRepo from './application/addMultipleUrl.js'
 import GetNewUrlRepo from './application/getNewUrl.js'
 import DeleteUrlRepo from './application/deleteUrl.js'
 import ObtenerUnaUrl from './application/obtenerUnaUrl.js'
@@ -20,7 +20,7 @@ const UrlRepository = new MongoUrlRepository()
 
 export const crearUrl = async (req, res, next) => {
   try {
-    const query = CrearUrl({ UrlRepository })
+    const query = AddUrlRepo({ UrlRepository })
     const person = await query(req.body)
     res.status(201).json({
       person,
@@ -33,7 +33,7 @@ export const crearUrl = async (req, res, next) => {
 
 export const createMultipleUrl = async (req, res, next) => {
   try {
-    const query = CreateMultipleUrlRepo({ UrlRepository })
+    const query = AddMultipleUrlRepo({ UrlRepository })
     const urls = await query(req.body)
     const rsp = new AppResponse(1, 'Urls were successfully created.', urls)
     res.status(201).json(rsp)
