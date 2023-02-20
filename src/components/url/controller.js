@@ -2,7 +2,7 @@ import MongoUrlRepository from './infraestructure/MongoUrlRepository.js'
 import CrearUrl from './application/crearUrl.js'
 import CrearVariasUrls from './application/crearVariasUrls.js'
 import GetNewUrlRepo from './application/getNewUrl.js'
-import EliminarUrl from './application/eliminarUrl.js'
+import DeleteUrlRepo from './application/deleteUrl.js'
 import ObtenerUnaUrl from './application/obtenerUnaUrl.js'
 import ObtenerUrls from './application/obtenerUrls.js'
 import ObtenerUrlsRandom from './application/obtenerUrlsRandom.js'
@@ -44,7 +44,7 @@ export const createMultipleUrl = async (req, res, next) => {
 
 export const deleteUrlById = async (req, res, next) => {
   try {
-    const query = EliminarUrl({ UrlRepository })
+    const query = DeleteUrlRepo({ UrlRepository })
     const { deletedCount, id } = await query({ id: req.params.id })
     if (deletedCount > 0) {
       const rsp = new AppResponse(1, 'Url was successfully deleted.', id)
