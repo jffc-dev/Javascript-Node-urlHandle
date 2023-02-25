@@ -86,6 +86,11 @@ class MongoUrlRepository {
       return null
     }
   }
+
+  async deleteElementFromArray (idMain, array, idProp) {
+    const result = await this.mongoDB.deleteElementFromArray(this.collection, idMain, array, idProp)
+    return result
+  }
 }
 
 export default MongoUrlRepository
