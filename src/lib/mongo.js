@@ -101,6 +101,16 @@ class MongoLib {
       { $sample: { size: parseInt(size) } }
     ]).toArray()
   }
+
+  async deleteElementFromArray (collection, idMain, array, idProp) {
+    const db = await this.connect()
+    const query = `{ "${array}": { "_id": ${idProp} } }`
+    const result = await db.collection(collection).updateOne(
+      { _id: ObjectId(idMain) },
+      { $pull: JSON.parse(query) }
+    )
+    return result.upsertedId || idMain
+  }
 }
 
 export default MongoLib
