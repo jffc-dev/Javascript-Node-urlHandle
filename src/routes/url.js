@@ -10,7 +10,8 @@ import {
   addTitleToUrl,
   restoredUrl,
   getNewUrl,
-  getUrlsPaginate
+  getUrlsPaginate,
+  deleteTitleFromUrl
 } from '../components/url/controller.js'
 import validationHandler from '../utils/middlewares/validationHandler.js'
 import { createUrlSchema } from '../components/url/domain/add.js'
@@ -38,5 +39,7 @@ router.patch('/add-title/:id', addTitleToUrl)
 router.patch('/add-reset/:id', restoredUrl)
 
 router.post('/', validationHandler(createUrlSchema), crearUrl)
+
+router.delete('/delete-title/:id', deleteTitleFromUrl)
 
 export default router
