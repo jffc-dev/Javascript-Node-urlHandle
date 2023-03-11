@@ -3,6 +3,7 @@ import AddUrlRepo from './application/addUrl.js'
 import AddMultipleUrlRepo from './application/addMultipleUrl.js'
 import GetNewUrlRepo from './application/getNewUrl.js'
 import DeleteUrlRepo from './application/deleteUrl.js'
+import DeleteTitleFromUrlRepo from './application/deleteTitleFromUrl.js'
 import ObtenerUnaUrl from './application/obtenerUnaUrl.js'
 import ObtenerUrls from './application/obtenerUrls.js'
 import ObtenerUrlsRandom from './application/obtenerUrlsRandom.js'
@@ -162,6 +163,25 @@ export const getUrlsPaginate = async (req, res, next) => {
     const data = new AppResponseDataPaginated(urls, count, totalPages, parseInt(page))
     const rsp = new AppResponse(1, 'Url was successfully loaded.', data)
     res.status(201).json(rsp)
+  } catch (e) {
+    next(e)
+  }
+}
+
+export const deleteTitleFromUrl = async (req, res, next) => {
+  try {
+    const { idTitle } = req.body
+    const query = DeleteTitleFromUrlRepo({ UrlRepository })
+    const result = await query({ idUrl: req.params.id, array: 'titles', idTitle })
+    const queryGet = ObtenerUnaUrl({ UrlRepository })
+    const { url: urlFound } = await queryGet({ id: req.params.id })
+    if (result) {
+      const rsp = new AppResponse(1, 'Title was successfully deleted.', urlFound)
+      res.status(201).json(rsp)
+    } else {
+      const rsp = new AppResponse(0, 'Title not found.', { })
+      res.status(404).json(rsp)
+    }
   } catch (e) {
     next(e)
   }
