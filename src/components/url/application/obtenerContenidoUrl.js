@@ -37,7 +37,7 @@ export default () => {
 
     return {
       url,
-      title: bodyTitle
+      title: bodyTitle.trim()
     }
   }
 }

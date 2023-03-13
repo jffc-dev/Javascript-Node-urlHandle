@@ -95,10 +95,8 @@ export const obtenerUrlsRandom = async (req, res, next) => {
 
 export const obtenerContenidoUrl = async (req, res, next) => {
   try {
-    const queryGet = ObtenerUnaUrl({ UrlRepository })
-    const { url: urlFound } = await queryGet({ id: req.body.id })
     const query = ObtenerContenidoUrl({ UrlRepository })
-    const contenido = await query({ url: urlFound.url })
+    const contenido = await query({ url: req.body.url })
     const rsp = new AppResponse(1, 'Url was successfully loaded.', { id: req.body.id, ...contenido })
     res.status(201).json(rsp)
   } catch (e) {
