@@ -6,6 +6,7 @@ import {
   obtenerUrls,
   obtenerUrlsRandom,
   createMultipleUrl,
+  createMultipleUrlDetailed,
   obtenerContenidoUrl,
   addTitleToUrl,
   restoredUrl,
@@ -31,6 +32,8 @@ router.delete('/:id', deleteUrlById)
 router.post('/get-new-url/', getNewUrl)
 
 router.post('/multiple/', createMultipleUrl)
+
+router.post('/multiple-detailed/', createMultipleUrlDetailed)
 
 router.post('/load/', obtenerContenidoUrl)
 
