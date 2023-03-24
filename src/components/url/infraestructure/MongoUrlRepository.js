@@ -91,6 +91,15 @@ class MongoUrlRepository {
     const result = await this.mongoDB.deleteElementFromArray(this.collection, idMain, array, idProp)
     return result
   }
+
+  async addManyDetailed (urls) {
+    const { ops: rpta } = await this.mongoDB.createMany(this.collection, urls.map(function (link) {
+      const newObj = { _id: 1, title: link.title, audi_createdDate: new Date() }
+      return { url: link.url, titles: [newObj], audi_createdDate: new Date() }
+    }))
+
+    return rpta
+  }
 }
 
 export default MongoUrlRepository
