@@ -13,7 +13,8 @@ export const createUrlSchema = Joi.object({
 export const createUrlSchemaMultipleDetailed = Joi.object({
   urls: Joi.array().items(
     Joi.object({
-      url: Joi.string()
+      url: Joi.string().required(),
+      title: Joi.string().allow('')
     })
   )
 })
