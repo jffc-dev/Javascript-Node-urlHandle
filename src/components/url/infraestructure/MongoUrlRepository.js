@@ -94,8 +94,8 @@ class MongoUrlRepository {
 
   async addManyDetailed (urls) {
     const { ops: rpta } = await this.mongoDB.createMany(this.collection, urls.map(function (link) {
-      const newObj = { _id: 1, title: link.title, audi_createdDate: new Date() }
-      return { url: link.url, titles: [newObj], audi_createdDate: new Date() }
+      const newTitle = { _id: 1, title: link.title, audi_createdDate: new Date() }
+      return { url: link.url, titles: [newTitle], audi_createdDate: new Date() }
     }))
 
     return rpta

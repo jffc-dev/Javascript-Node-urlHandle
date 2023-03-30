@@ -15,7 +15,7 @@ import {
   deleteTitleFromUrl
 } from '../components/url/controller.js'
 import validationHandler from '../utils/middlewares/validationHandler.js'
-import { createUrlSchema } from '../components/url/domain/add.js'
+import { createUrlSchema, createUrlSchemaMultipleDetailed } from '../components/url/domain/add.js'
 
 const router = express.Router()
 
@@ -33,7 +33,7 @@ router.post('/get-new-url/', getNewUrl)
 
 router.post('/multiple/', createMultipleUrl)
 
-router.post('/multiple-detailed/', createMultipleUrlDetailed)
+router.post('/multiple-detailed/', validationHandler(createUrlSchemaMultipleDetailed), createMultipleUrlDetailed)
 
 router.post('/load/', obtenerContenidoUrl)
 

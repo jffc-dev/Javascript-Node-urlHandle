@@ -9,3 +9,11 @@ export const personSchema = Joi.object({
 export const createUrlSchema = Joi.object({
   url: Joi.string().alphanum().required()
 })
+
+export const createUrlSchemaMultipleDetailed = Joi.object({
+  urls: Joi.array().items(
+    Joi.object({
+      url: Joi.string()
+    })
+  )
+})
