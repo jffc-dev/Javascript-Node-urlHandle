@@ -69,6 +69,31 @@ class MongoLib {
     return result
   }
 
+  async createManyTransaction (collection, data) {
+    let session = null
+    try {
+      const db = await this.connect()
+      session = this.client.startSession()
+
+      await session.withTransaction(async () => {
+        await db.collection(collection).insertMany(data)
+      }, {
+        readPreference: 'primary',
+        readConcern: { level: 'local' },
+        writeConcern: { w: 'majority' }
+      })
+
+      console.log('Transaction completed')
+    } catch (error) {
+      console.error('Transaction aborted. Error: ', error)
+    } finally {
+      if (session) {
+        session.endSession()
+      }
+      await this.client.close()
+    }
+  }
+
   async update (collection, id, data) {
     const db = await this.connect()
     const result = db.collection(collection).updateOne({ _id: ObjectId(id) }, { $set: data })
