@@ -1,7 +1,7 @@
 import MongoUrlRepository from './infraestructure/MongoUrlRepository.js'
 import AddUrlRepo from './application/addUrl.js'
 import AddMultipleUrlRepo from './application/addMultipleUrl.js'
-import AddMultipleUrlDetailedRepo from './application/addMultipleUrlDetailed.js'
+// import AddMultipleUrlDetailedRepo from './application/addMultipleUrlDetailed.js'
 import GetNewUrlRepo from './application/getNewUrl.js'
 import DeleteUrlRepo from './application/deleteUrl.js'
 import DeleteTitleFromUrlRepo from './application/deleteTitleFromUrl.js'
@@ -13,6 +13,7 @@ import GetUrlsPaginate from './application/getUrls.js'
 import CountUrls from './application/countUrls.js'
 import AgregarTituloUrl from './application/agregarTituloUrl.js'
 import ReestablecerUrl from './application/restablecerUrl.js'
+import GetByArrayRepo from './application/getByArray.js'
 import { AppResponse, AppResponseDataPaginated } from '../../utils/general.js'
 
 import { ResetUrlModel } from './model/urlValidation.js'
@@ -46,11 +47,15 @@ export const createMultipleUrl = async (req, res, next) => {
 
 export const createMultipleUrlDetailed = async (req, res, next) => {
   try {
-    const query = AddMultipleUrlDetailedRepo({ UrlRepository })
-    const urls = await query(req.body)
+    const query = GetByArrayRepo({ UrlRepository })
+    const { urls: urlsInput } = req.body
+    console.log(req.body)
+    const urls = await query({ field: 'url', data: urlsInput })
+    console.log(urls)
     const rsp = new AppResponse(1, 'Urls were successfully created.', urls)
     res.status(201).json(rsp)
   } catch (e) {
+    console.log(e)
     next(e)
   }
 }

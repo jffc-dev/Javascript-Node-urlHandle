@@ -2,7 +2,7 @@ import MongoPlaylistRepository from './infraestructure/MongoPlaylistRepository.j
 import createPlaylistRepo from './application/createPlaylist.js'
 import getAllPlaylistRepo from './application/getAllPlaylist.js'
 import getPlaylistRepo from './application/getPlaylist.js'
-import createPlaylistWithListRepo from './application/createPlaylistWithListRepo.js'
+import createPlaylistWithListRepo from './application/createPlaylistWithList.js'
 import { AppResponse } from '../../utils/general.js'
 
 const PlaylistRepository = new MongoPlaylistRepository()
