@@ -8,10 +8,12 @@ const MONGO_DB = config.mongo.db
 
 class MongoLib {
   constructor () {
+    console.log('constructor')
     this.client = new MongoClient(MONGO_URI, {
       useUnifiedTopology: true
     })
     this.dbName = MONGO_DB
+    this.transactionAborted = false
   }
 
   /**
@@ -57,6 +59,13 @@ class MongoLib {
     return db.collection(collection).findOne(query)
   }
 
+  async getByArray (collection, field, data) {
+    const db = await this.connect()
+    const query = {}
+    query[field] = { $in: data }
+    return db.collection(collection).find(query).toArray()
+  }
+
   async create (collection, data) {
     const db = await this.connect()
     const result = await db.collection(collection).insertOne({ ...data, audi_createdDate: new Date() })
@@ -70,27 +79,30 @@ class MongoLib {
   }
 
   async createManyTransaction (collection, data) {
-    let session = null
+    await this.connect()
+    const session = this.client.startSession()
     try {
-      const db = await this.connect()
-      session = this.client.startSession()
-
       await session.withTransaction(async () => {
-        await db.collection(collection).insertMany(data)
+        const collectionTrans = this.client.db(this.dbName).collection(collection)
+        for (const document of data) {
+          await collectionTrans.insertOne(document)
+        }
       }, {
         readPreference: 'primary',
-        readConcern: { level: 'local' },
+        readConcern: { level: 'majority' },
         writeConcern: { w: 'majority' }
       })
-
-      console.log('Transaction completed')
+      return true
     } catch (error) {
-      console.error('Transaction aborted. Error: ', error)
-    } finally {
-      if (session) {
-        session.endSession()
+      console.error('Error inserting documents:', error)
+      if (!this.transactionAborted) {
+        this.transactionAborted = true
+        await session.abortTransaction()
+        await this.client.close()
       }
-      await this.client.close()
+      throw error
+    } finally {
+      await session.endSession()
     }
   }
 
