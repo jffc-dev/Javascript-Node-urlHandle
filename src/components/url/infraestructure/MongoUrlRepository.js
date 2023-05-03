@@ -36,6 +36,11 @@ class MongoUrlRepository {
     return { urls }
   }
 
+  async getByArray (field, data) {
+    const urls = await this.mongoDB.getByArray(this.collection, field, data)
+    return { urls }
+  }
+
   async getAllPaginate (page, size) {
     const urls = await this.mongoDB.getAllPaginate(
       this.collection, null, null, page, size
@@ -93,7 +98,7 @@ class MongoUrlRepository {
   }
 
   async addManyDetailed (urls) {
-    const { ops: rpta } = await this.mongoDB.createManyTransaction(this.collection, urls.map(function (link) {
+    const rpta = await this.mongoDB.createManyTransaction(this.collection, urls.map(function (link) {
       const newTitle = { _id: 1, title: link.title, audi_createdDate: new Date() }
       return { url: link.url, titles: [newTitle], audi_createdDate: new Date() }
     }))
