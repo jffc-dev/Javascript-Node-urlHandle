@@ -17,6 +17,7 @@ import GetByArrayRepo from './application/getByArray.js'
 import { AppResponse, AppResponseDataPaginated } from '../../utils/general.js'
 
 import { ResetUrlModel } from './model/urlValidation.js'
+import { STATUS_RESPONSE_ERROR, STATUS_RESPONSE_OK, STATUS_RESPONSE_WARNING } from '../../utils/constants/general.js'
 // import { StatusValidation } from './model/validation.js'
 
 const UrlRepository = new MongoUrlRepository()
@@ -49,11 +50,28 @@ export const createMultipleUrlDetailed = async (req, res, next) => {
   try {
     const query = GetByArrayRepo({ UrlRepository })
     const { urls: urlsInput } = req.body
-    console.log(req.body)
-    const urls = await query({ field: 'url', data: urlsInput })
-    console.log(urls)
-    const rsp = new AppResponse(1, 'Urls were successfully created.', urls)
-    res.status(201).json(rsp)
+    const urls = []
+    for (const urlInput of urlsInput) {
+      const linkRsp = await query({ data: urlInput })
+      urls.push(linkRsp)
+    }
+    const createdLinks = urls.filter((url) => url.foundUrl === null)
+    const errorLinks = urls.filter((url) => url.foundUrl !== null)
+    const responseData = {
+      createdLinks: createdLinks,
+      errorLinks: errorLinks
+    }
+
+    if (urls.length === createdLinks.length) {
+      const rsp = new AppResponse(STATUS_RESPONSE_OK, 'Urls were created successfully.', responseData)
+      res.status(201).json(rsp)
+    } else if (urls.length < createdLinks.length && urls.length > 0) {
+      const rsp = new AppResponse(STATUS_RESPONSE_WARNING, `${createdLinks.length} of ${urls.length} urls were created successfully.`, responseData)
+      res.status(201).json(rsp)
+    } else {
+      const rsp = new AppResponse(STATUS_RESPONSE_ERROR, 'None url was created successfully.', responseData)
+      res.status(201).json(rsp)
+    }
   } catch (e) {
     console.log(e)
     next(e)
