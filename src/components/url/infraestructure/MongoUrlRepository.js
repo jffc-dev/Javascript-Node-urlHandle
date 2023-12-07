@@ -6,9 +6,9 @@ class MongoUrlRepository {
     this.mongoDB = new MongoLib()
   }
 
-  async add (person) {
-    const id = await this.mongoDB.create(this.collection, person)
-    return { id, ...person }
+  async add (link) {
+    const rpta = await this.mongoDB.create(this.collection, { url: link, audi_createdDate: new Date() })
+    return rpta
   }
 
   async addMany (urls) {
@@ -26,8 +26,8 @@ class MongoUrlRepository {
     return result
   }
 
-  async get (id) {
-    const url = await this.mongoDB.get(this.collection, id)
+  async get (id, query = null) {
+    const url = await this.mongoDB.get(this.collection, id, query)
     return { url }
   }
 
