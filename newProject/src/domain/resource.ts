@@ -1,7 +1,7 @@
 import { Entity } from 'src/application/core/entity';
 
 export interface ResourceProps {
-  resourceId: string;
+  resourceId: number;
   url: string;
   title: string;
   createdAt: Date;
@@ -12,7 +12,7 @@ export class Resource extends Entity<ResourceProps> {
     super(props);
   }
 
-  get resourceId(): string {
+  get resourceId(): number {
     return this.props.resourceId;
   }
 
@@ -28,7 +28,7 @@ export class Resource extends Entity<ResourceProps> {
     return this.props.createdAt;
   }
 
-  set resourceId(value: string) {
+  set resourceId(value: number) {
     this.props.resourceId = value;
   }
 

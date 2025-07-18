@@ -7,6 +7,6 @@ export class ResourceController {
 
   @Get()
   getAll() {
-    return this.getResourcesUseCase.execute({ id: 'some-id' });
+    return this.getResourcesUseCase.execute();
   }
 }

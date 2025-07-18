@@ -1,16 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { ResourceRepository } from 'src/application/contracts/resource.repository';
 import { Resource } from 'src/domain/resource';
-
-interface IGetResourcesUseCaseProps {
-  id: string;
-}
 
 @Injectable()
 export class GetResourcesUseCase {
-  constructor() {}
+  constructor(private readonly resourceRepository: ResourceRepository) {}
 
-  execute({ id }: IGetResourcesUseCaseProps): Resource[] {
-    console.log(id);
-    return [] as Resource[];
+  async execute(): Promise<Resource[]> {
+    const resourceResponse = await this.resourceRepository.getResources();
+    return resourceResponse;
   }
 }
