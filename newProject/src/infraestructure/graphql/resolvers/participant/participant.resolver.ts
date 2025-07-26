@@ -1,0 +1,35 @@
+import { UsePipes, ValidationPipe } from '@nestjs/common';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Participant } from '../../entities/participant.entity';
+import { CreateParticipantInput } from 'src/application/dtos/requests/create-participant.input';
+import { ListParticipantsUseCase } from 'src/application/use-cases/participant/list.use-case';
+import { CreateParticipantUseCase } from 'src/application/use-cases/participant/create.use-case';
+
+@UsePipes(
+  new ValidationPipe({
+    transform: true,
+  }),
+)
+@Resolver(() => Participant)
+export class ParticipantResolver {
+  constructor(
+    private readonly createParticipantUseCase: CreateParticipantUseCase,
+    private readonly listParticipantsUseCase: ListParticipantsUseCase,
+  ) {}
+
+  @Query(() => [Participant], { name: 'list' })
+  list() {
+    return this.listParticipantsUseCase.execute({});
+  }
+
+  @Mutation(() => Participant, { name: 'create' })
+  async create(
+    @Args('data') data: CreateParticipantInput,
+  ): Promise<Participant> {
+    const { name } = data;
+    const cartDetail = await this.createParticipantUseCase.execute({
+      name,
+    });
+    return Participant.fromDomainToEntity(cartDetail);
+  }
+}

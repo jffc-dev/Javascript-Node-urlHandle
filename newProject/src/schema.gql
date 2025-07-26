@@ -1,0 +1,27 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Participant {
+  id: Int!
+  name: String!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Query {
+  list: [Participant!]!
+}
+
+type Mutation {
+  create(data: CreateParticipantInput!): Participant!
+}
+
+input CreateParticipantInput {
+  name: String!
+}
