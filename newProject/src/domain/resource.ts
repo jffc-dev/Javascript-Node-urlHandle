@@ -1,46 +1,144 @@
-import { Entity } from 'src/application/core/entity';
+import { Flag } from './flag';
+import { Participant } from './participant';
+import { Rating } from './rating';
 
-export interface ResourceProps {
-  resourceId: number;
-  url: string;
+interface ResourceProps {
+  id: number;
+  uuid: string;
   title: string;
+  url: string;
+  active: boolean;
+  parent: Resource | null;
+  children: Resource[];
+  flags: Flag[];
+  participants: Participant[];
+  ratings: Rating[];
   createdAt: Date;
+  updatedAt: Date | null;
 }
 
-export class Resource extends Entity<ResourceProps> {
-  constructor(props: ResourceProps) {
-    super(props);
+export class Resource {
+  public get id(): number {
+    return this._id;
   }
 
-  get resourceId(): number {
-    return this.props.resourceId;
+  public get uuid(): string {
+    return this._uuid;
   }
 
-  get url(): string {
-    return this.props.url;
+  public get title(): string {
+    return this._title;
   }
 
-  get title(): string {
-    return this.props.title;
+  public get url(): string {
+    return this._url;
   }
 
-  get createdAt(): Date {
-    return this.props.createdAt;
+  public get active(): boolean {
+    return this._active;
   }
 
-  set resourceId(value: number) {
-    this.props.resourceId = value;
+  public get parent(): Resource | null {
+    return this._parent;
   }
 
-  set url(value: string) {
-    this.props.url = value;
+  public get children(): Resource[] {
+    return this._children;
   }
 
-  set title(value: string) {
-    this.props.title = value;
+  public get flags(): Flag[] {
+    return this._flags;
   }
 
-  set createdAt(value: Date) {
-    this.props.createdAt = value;
+  public get participants(): Participant[] {
+    return this._participants;
   }
+
+  public get ratings(): Rating[] {
+    return this._ratings;
+  }
+
+  public get createdAt(): Date {
+    return this._createdAt;
+  }
+
+  public get updatedAt(): Date | null {
+    return this._updatedAt;
+  }
+
+  public set id(value: number) {
+    this._id = value;
+  }
+
+  public set uuid(value: string) {
+    this._uuid = value;
+  }
+
+  public set title(value: string) {
+    this._title = value;
+  }
+
+  public set url(value: string) {
+    this._url = value;
+  }
+
+  public set active(value: boolean) {
+    this._active = value;
+  }
+
+  public set parent(value: Resource) {
+    this._parent = value;
+  }
+
+  public set children(value: Resource[]) {
+    this._children = value;
+  }
+
+  public set flags(value: Flag[]) {
+    this._flags = value;
+  }
+
+  public set participants(value: Participant[]) {
+    this._participants = value;
+  }
+
+  public set ratings(value: Rating[]) {
+    this._ratings = value;
+  }
+
+  public set createdAt(value: Date) {
+    this._createdAt = value;
+  }
+
+  public set updatedAt(value: Date) {
+    this._updatedAt = value;
+  }
+
+  constructor(input: ResourceProps) {
+    this._id = input.id;
+    this._uuid = input.uuid;
+    this._title = input.title;
+    this._url = input.url;
+    this._active = input.active;
+    this._parent = input.parent;
+    this._children = input.children;
+    this._flags = input.flags;
+    this._participants = input.participants;
+    this._ratings = input.ratings;
+    this._createdAt = input.createdAt;
+    this._updatedAt = input.updatedAt;
+  }
+
+  private _id: number;
+  private _uuid: string;
+  private _title: string;
+  private _url: string;
+  private _active: boolean;
+  private _parent: Resource | null;
+  private _children: Resource[];
+  private _flags: Flag[];
+  private _participants: Participant[];
+  private _ratings: Rating[];
+  private _createdAt: Date;
+  private _updatedAt: Date | null;
 }

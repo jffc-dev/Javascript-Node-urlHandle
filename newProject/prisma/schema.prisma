@@ -14,16 +14,97 @@ datasource db {
   url      = env("PG_URL")
 }
 
-model Resource {
-  id        Int         @default(autoincrement()) @id
-  uuid      String      @default(uuid()) @unique
-  title     String
-  url       String
-  active    Boolean     @default(true)
-  parentId  Int?
-  parent    Resource?   @relation("ResourceParent", fields: [parentId], references: [id])
-  children  Resource[]  @relation("ResourceParent")
+generator prismaClassGenerator {
+    provider = "prisma-class-generator"
+    output   = "./generated/prismaClass"
+}
 
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+model Resource {
+  id                      Int                     @default(autoincrement()) @id
+  uuid                    String?                 @default(dbgenerated("gen_random_uuid()")) @unique @db.Uuid
+  title                   String        
+  url                     String        
+  active                  Boolean                 @default(true)
+  parentId                Int?        
+  parent                  Resource?               @relation("ResourceParent", fields: [parentId], references: [id])
+  children                Resource[]              @relation("ResourceParent")
+  resourceFlags           ResourceFlag[]
+  resourceParticipants    ResourceParticipant[]
+  ratings                 Rating[]
+
+  createdAt               DateTime                @default(now())
+  updatedAt               DateTime?               @updatedAt
+}       
+
+model Flag {        
+  id                      Int                     @default(autoincrement()) @id
+  uuid                    String?                 @default(dbgenerated("gen_random_uuid()")) @unique @db.Uuid
+  name                    String                  @unique
+  resourceFlags           ResourceFlag[]        
+
+  createdAt               DateTime                @default(now())
+  updatedAt               DateTime?               @updatedAt
+}
+
+model ResourceFlag {
+  resourceId              Int
+  flagId                  Int
+  
+  resource                Resource                @relation(fields: [resourceId], references: [id])
+  flag                    Flag                    @relation(fields: [flagId], references: [id])
+
+  @@id([resourceId, flagId])
+}
+
+model Participant {
+  id                      Int                     @default(autoincrement()) @id
+  uuid                    String?                 @default(dbgenerated("gen_random_uuid()")) @unique @db.Uuid
+  name                    String                  @unique
+  resourceParticipants    ResourceParticipant[]
+  
+  createdAt               DateTime                @default(now())
+  updatedAt               DateTime?               @updatedAt
+}
+
+model ResourceParticipant {
+  resourceId              Int
+  flagId                  Int
+
+  resource                Resource                @relation(fields: [resourceId], references: [id])
+  flag                    Participant             @relation(fields: [flagId], references: [id])
+
+  @@id([resourceId, flagId])
+}
+
+model User {
+  id                      Int                     @default(autoincrement()) @id
+  uuid                    String?                 @default(dbgenerated("gen_random_uuid()")) @unique @db.Uuid
+  email                   String                  @unique
+  name                    String                  @db.VarChar(100)
+  lastName                String                  @db.VarChar(100)
+  phoneNumber             String?                 
+  password                String?       
+  address                 String?       
+  resetPasswordToken      String?                 @unique 
+  isActive                Boolean?                @default(false) 
+  resetPasswordExpiresAt  DateTime?               @db.Timestamp(6)
+  ratings                 Rating[]
+
+  createdAt               DateTime?               @default(now())
+  updatedAt               DateTime?               @updatedAt
+}
+
+model Rating {
+  id                      Int                     @default(autoincrement()) @id
+  uuid                    String?                 @default(dbgenerated("gen_random_uuid()")) @unique @db.Uuid
+  userId                  Int
+  resourceId              Int
+  score                   Int
+  comment                 String?
+
+  user                    User                    @relation(fields: [userId], references: [id])
+  resource                Resource                @relation(fields: [resourceId], references: [id])
+
+  createdAt               DateTime                @default(now())
+  updatedAt               DateTime?               @updatedAt
 }

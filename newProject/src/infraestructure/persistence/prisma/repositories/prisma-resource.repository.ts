@@ -5,14 +5,22 @@ import { Prisma } from 'generated/prisma';
 import { ACTION_FIND } from 'src/application/utils/constants';
 import { PrismaResourceMapper } from '../mappers/prisma-resource.mapper';
 import { Resource } from 'src/domain/resource';
+import { FindResourceRepositoryDto } from 'src/application/dtos/repository/find-resource.dto';
 
 @Injectable()
 export class PrismaResourceRepository implements ResourceRepository {
   constructor(private prisma: PrismaService) {}
 
-  async getResources(): Promise<Resource[]> {
+  async find(query: FindResourceRepositoryDto): Promise<Resource[]> {
+    const { page, limit, filter } = query;
     try {
-      const resources = await this.prisma.resource.findMany({});
+      const resources = await this.prisma.resource.findMany({
+        take: limit,
+        skip: (page - 1) * limit,
+        where: {
+          ...filter,
+        },
+      });
 
       const data = resources.map((resource) =>
         PrismaResourceMapper.toDomain(resource),
