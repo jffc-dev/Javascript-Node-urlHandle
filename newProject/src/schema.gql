@@ -26,7 +26,13 @@ type Resource {
 
 type Query {
   listParticipants: [Participant!]!
-  listResources: [Resource!]!
+  listResources(input: ListResourcesInputDto!): [Resource!]!
+}
+
+input ListResourcesInputDto {
+  participantId: Int
+  page: Int
+  limit: Int
 }
 
 type Mutation {

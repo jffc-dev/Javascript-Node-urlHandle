@@ -1,9 +1,10 @@
 import { UsePipes, ValidationPipe } from '@nestjs/common';
-import { Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Resource } from '../../entities/resource.entity';
 import { GetResourcesUseCase } from 'src/application/use-cases/resource/get-resources.use-case';
 import { Participant } from '../../entities/participant.entity';
 import { ParticipantsByResourceLoader } from 'src/infraestructure/common/dataloaders/participants-by-resource.loader';
+import { ListResourcesInputDto } from '../../dto/resource/list.input.dto';
 
 @UsePipes(
   new ValidationPipe({
@@ -18,8 +19,8 @@ export class ResourceResolver {
   ) {}
 
   @Query(() => [Resource], { name: 'listResources' })
-  list() {
-    return this.getResourcesUseCase.execute({});
+  list(@Args('input') input: ListResourcesInputDto) {
+    return this.getResourcesUseCase.execute(input);
   }
 
   @ResolveField(() => [Participant], { name: 'participants' })
