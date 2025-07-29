@@ -68,12 +68,12 @@ model Participant {
 
 model ResourceParticipant {
   resourceId              Int
-  flagId                  Int
+  participantId           Int
 
   resource                Resource                @relation(fields: [resourceId], references: [id])
-  flag                    Participant             @relation(fields: [flagId], references: [id])
+  participant             Participant             @relation(fields: [participantId], references: [id])
 
-  @@id([resourceId, flagId])
+  @@id([resourceId, participantId])
 }
 
 model User {

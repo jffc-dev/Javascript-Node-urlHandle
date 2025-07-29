@@ -1,8 +1,19 @@
-import { Prisma, Resource as PrismaResource } from 'generated/prisma';
+import {
+  Prisma,
+  Resource as PrismaResource,
+  ResourceParticipant,
+} from 'generated/prisma';
 import { Resource } from 'src/domain/resource';
 
 export class PrismaResourceMapper {
-  static toDomain(entity: PrismaResource): Resource {
+  static toDomain(
+    entity: PrismaResource & {
+      resourceParticipants?: ResourceParticipant[];
+    },
+  ): Resource {
+    const { resourceParticipants } = entity;
+    const participantIds =
+      resourceParticipants?.map((rp) => rp.participantId) || [];
     return new Resource({
       id: entity.id,
       uuid: entity.uuid ?? '',
@@ -14,6 +25,7 @@ export class PrismaResourceMapper {
       flags: [],
       participants: [],
       ratings: [],
+      participantIds: participantIds,
       updatedAt: entity.updatedAt,
       createdAt: entity.createdAt,
     });

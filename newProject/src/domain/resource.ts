@@ -13,6 +13,7 @@ interface ResourceProps {
   flags: Flag[];
   participants: Participant[];
   ratings: Rating[];
+  participantIds: number[];
   createdAt: Date;
   updatedAt: Date | null;
 }
@@ -66,6 +67,10 @@ export class Resource {
     return this._updatedAt;
   }
 
+  public get participantIds(): number[] {
+    return this._participantIds;
+  }
+
   public set id(value: number) {
     this._id = value;
   }
@@ -114,6 +119,10 @@ export class Resource {
     this._updatedAt = value;
   }
 
+  public set participantIds(value: number[]) {
+    this._participantIds = value;
+  }
+
   constructor(input: ResourceProps) {
     this._id = input.id;
     this._uuid = input.uuid;
@@ -125,6 +134,7 @@ export class Resource {
     this._flags = input.flags;
     this._participants = input.participants;
     this._ratings = input.ratings;
+    this._participantIds = input.participantIds;
     this._createdAt = input.createdAt;
     this._updatedAt = input.updatedAt;
   }
@@ -139,6 +149,7 @@ export class Resource {
   private _flags: Flag[];
   private _participants: Participant[];
   private _ratings: Rating[];
+  private _participantIds: number[];
   private _createdAt: Date;
   private _updatedAt: Date | null;
 }

@@ -1,9 +1,18 @@
 import { UsePipes, ValidationPipe } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { Participant } from '../../entities/participant.entity';
 import { CreateParticipantInput } from 'src/application/dtos/requests/create-participant.input';
 import { ListParticipantsUseCase } from 'src/application/use-cases/participant/list.use-case';
 import { CreateParticipantUseCase } from 'src/application/use-cases/participant/create.use-case';
+import { Resource } from '../../entities/resource.entity';
+import { ResourcesByParticipantLoader } from 'src/infraestructure/common/dataloaders/resources-by-participant.loader';
 
 @UsePipes(
   new ValidationPipe({
@@ -15,6 +24,8 @@ export class ParticipantResolver {
   constructor(
     private readonly createParticipantUseCase: CreateParticipantUseCase,
     private readonly listParticipantsUseCase: ListParticipantsUseCase,
+
+    private readonly resourceLoader: ResourcesByParticipantLoader,
   ) {}
 
   @Query(() => [Participant], { name: 'list' })
@@ -31,5 +42,11 @@ export class ParticipantResolver {
       name,
     });
     return Participant.fromDomainToEntity(cartDetail);
+  }
+
+  @ResolveField(() => [Resource], { name: 'resources' })
+  async resources(@Parent() participant: Participant): Promise<Resource[]> {
+    const resources = await this.resourceLoader.load(participant.id);
+    return resources.map((resource) => Resource.fromDomainToEntity(resource));
   }
 }

@@ -5,7 +5,8 @@ import { Prisma } from 'generated/prisma';
 import { ACTION_FIND } from 'src/application/utils/constants';
 import { PrismaResourceMapper } from '../mappers/prisma-resource.mapper';
 import { Resource } from 'src/domain/resource';
-import { FindResourceRepositoryDto } from 'src/application/dtos/repository/find-resource.dto';
+import { FindResourceRepositoryDto } from 'src/application/dtos/repository/resource/find-resource.dto';
+import { FindByParticipantIdsRepositoryDto } from 'src/application/dtos/repository/resource/find-by-participant-ids.dto';
 
 @Injectable()
 export class PrismaResourceRepository implements ResourceRepository {
@@ -15,10 +16,46 @@ export class PrismaResourceRepository implements ResourceRepository {
     const { page, limit, filter } = query;
     try {
       const resources = await this.prisma.resource.findMany({
+        include: {
+          resourceParticipants: true,
+        },
         take: limit,
         skip: (page - 1) * limit,
         where: {
           ...filter,
+        },
+      });
+
+      const data = resources.map((resource) => {
+        console.log(resource);
+        return PrismaResourceMapper.toDomain(resource);
+      });
+      return data;
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        this.handleDBError(error, ACTION_FIND);
+      }
+      throw error;
+    }
+  }
+
+  async findByParticipantIds(
+    query: FindByParticipantIdsRepositoryDto,
+  ): Promise<Resource[]> {
+    const { participantIds } = query;
+    try {
+      const resources = await this.prisma.resource.findMany({
+        include: {
+          resourceParticipants: true,
+        },
+        where: {
+          resourceParticipants: {
+            some: {
+              participantId: {
+                in: participantIds,
+              },
+            },
+          },
         },
       });
 

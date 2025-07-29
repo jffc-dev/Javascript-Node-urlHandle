@@ -7,6 +7,7 @@ import { PrismaParticipantMapper } from '../mappers/prisma-participant.mapper';
 import { Prisma } from 'generated/prisma';
 import { ACTION_FIND } from 'src/application/utils/constants';
 import { CreateParticipantRepositoryDto } from 'src/application/dtos/repository/create-participants.dto';
+import { FindByIdsParticipantDto } from 'src/application/dtos/repository/participant/find-by-ids.dto';
 
 @Injectable()
 export class PrismaParticipantRepository implements ParticipantRepository {
@@ -18,6 +19,29 @@ export class PrismaParticipantRepository implements ParticipantRepository {
       const participants = await this.prisma.participant.findMany({
         take: limit,
         skip: (page - 1) * limit,
+      });
+
+      const data = participants.map((participant) =>
+        PrismaParticipantMapper.toDomain(participant),
+      );
+      return data;
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        this.handleDBError(error, ACTION_FIND);
+      }
+      throw error;
+    }
+  }
+
+  async findByIds(query: FindByIdsParticipantDto): Promise<Participant[]> {
+    const { participantIds } = query;
+    try {
+      const participants = await this.prisma.participant.findMany({
+        where: {
+          id: {
+            in: participantIds,
+          },
+        },
       });
 
       const data = participants.map((participant) =>
