@@ -27,7 +27,6 @@ export class PrismaResourceRepository implements ResourceRepository {
       });
 
       const data = resources.map((resource) => {
-        console.log(resource);
         return PrismaResourceMapper.toDomain(resource);
       });
       return data;

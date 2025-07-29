@@ -5,6 +5,7 @@ interface ParticipantProps {
   uuid: string;
   name: string;
   resourceParticipants: Resource[];
+  resourceIds: number[];
   createdAt: Date;
   updatedAt: Date | null;
 }
@@ -34,6 +35,10 @@ export class Participant {
     return this._updatedAt;
   }
 
+  public get resourceIds(): number[] {
+    return this._resourceIds;
+  }
+
   public set id(value: number) {
     this._id = value;
   }
@@ -58,12 +63,17 @@ export class Participant {
     this._updatedAt = value;
   }
 
+  public set resourceIds(value: number[]) {
+    this._resourceIds = value;
+  }
+
   //generate a constructor with all properties
   constructor(input: ParticipantProps) {
     this._id = input.id;
     this._uuid = input.uuid;
     this._name = input.name;
     this._resourceParticipants = input.resourceParticipants;
+    this._resourceIds = input.resourceIds;
     this._createdAt = input.createdAt;
     this._updatedAt = input.updatedAt;
   }
@@ -72,6 +82,7 @@ export class Participant {
   private _uuid: string;
   private _name: string;
   private _resourceParticipants: Resource[];
+  private _resourceIds: number[];
   private _createdAt: Date;
   private _updatedAt: Date | null;
 }

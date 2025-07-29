@@ -25,15 +25,15 @@ export class ParticipantResolver {
     private readonly createParticipantUseCase: CreateParticipantUseCase,
     private readonly listParticipantsUseCase: ListParticipantsUseCase,
 
-    private readonly resourceLoader: ResourcesByParticipantLoader,
+    private readonly resourceByParticipantLoader: ResourcesByParticipantLoader,
   ) {}
 
-  @Query(() => [Participant], { name: 'list' })
+  @Query(() => [Participant], { name: 'listParticipants' })
   list() {
     return this.listParticipantsUseCase.execute({});
   }
 
-  @Mutation(() => Participant, { name: 'create' })
+  @Mutation(() => Participant, { name: 'createParticipant' })
   async create(
     @Args('data') data: CreateParticipantInput,
   ): Promise<Participant> {
@@ -46,7 +46,9 @@ export class ParticipantResolver {
 
   @ResolveField(() => [Resource], { name: 'resources' })
   async resources(@Parent() participant: Participant): Promise<Resource[]> {
-    const resources = await this.resourceLoader.load(participant.id);
+    const resources = await this.resourceByParticipantLoader.load(
+      participant.id,
+    );
     return resources.map((resource) => Resource.fromDomainToEntity(resource));
   }
 }

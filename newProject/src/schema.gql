@@ -21,14 +21,16 @@ type Resource {
   url: String!
   createdAt: DateTime
   updatedAt: DateTime
+  participants: [Participant!]!
 }
 
 type Query {
-  list: [Participant!]!
+  listParticipants: [Participant!]!
+  listResources: [Resource!]!
 }
 
 type Mutation {
-  create(data: CreateParticipantInput!): Participant!
+  createParticipant(data: CreateParticipantInput!): Participant!
 }
 
 input CreateParticipantInput {

@@ -4,6 +4,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { ParticipantModule } from './resolvers/participant/participant.module';
+import { ResourceModule } from './resolvers/resource/resource.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { ParticipantModule } from './resolvers/participant/participant.module';
       },
     }),
     ParticipantModule,
+    ResourceModule,
   ],
   providers: [],
 })
