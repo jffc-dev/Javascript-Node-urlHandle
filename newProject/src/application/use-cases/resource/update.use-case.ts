@@ -29,13 +29,11 @@ export class UpdateResourceUseCase {
         url,
         status,
       });
-      console.log(participantIds, resourceResponse);
       const resourceParticipants =
         await this.resourceRepository.setParticipants({
           id: resourceResponse.id,
           participantds: participantIds.map((id) => ({ id })),
         });
-      console.log(resourceParticipants);
 
       if (resourceParticipants) {
         resourceResponse.participantIds = resourceParticipants.participantIds;
@@ -46,12 +44,9 @@ export class UpdateResourceUseCase {
         flagIds: flagIds.map((id) => ({ id })),
       });
 
-      console.log(resourceFlags);
-
       if (resourceFlags) {
         resourceResponse.flagIds = resourceFlags.flagIds;
       }
-      console.log('resourceResponse', resourceResponse);
       return resourceResponse;
     });
   }

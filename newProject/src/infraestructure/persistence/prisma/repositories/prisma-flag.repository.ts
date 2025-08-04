@@ -58,8 +58,6 @@ export class PrismaFlagRepository implements FlagRepository {
           resources: true,
         },
       });
-      console.log('flags', flags);
-      flags.map((flag) => console.log('flag', flag));
 
       const data = flags.map((flag) => PrismaFlagMapper.toDomain(flag));
       return data;

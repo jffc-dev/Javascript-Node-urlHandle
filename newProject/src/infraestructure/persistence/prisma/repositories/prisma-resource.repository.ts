@@ -20,6 +20,58 @@ export class PrismaResourceRepository implements ResourceRepository {
     private prisma: PrismaService,
     private clientManager: PrismaClientManager,
   ) {}
+  async findByResourceIds(resourceIds: number[]): Promise<Resource[]> {
+    try {
+      const prismaTx = this.clientManager.getClient();
+      const resources = await prismaTx.resource.findMany({
+        include: {
+          participants: {
+            select: {
+              id: true,
+            },
+          },
+          flags: {
+            select: {
+              id: true,
+            },
+          },
+        },
+        where: {
+          id: {
+            in: resourceIds,
+          },
+        },
+      });
+
+      const data = resources.map((resource) => {
+        return PrismaResourceMapper.toDomain(resource);
+      });
+      return data;
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        this.handleDBError(error, ACTION_FIND);
+      }
+      throw error;
+    }
+  }
+
+  async getRandom(size: number): Promise<number[]> {
+    try {
+      const prismaTx = this.clientManager.getClient();
+      const resources = await prismaTx.$queryRaw<{ id: number }[]>`
+        SELECT id FROM "Resource" 
+        WHERE "status" = 'PENDING'
+        ORDER BY RANDOM() LIMIT ${size}
+      `;
+
+      return resources.map((resource) => resource.id);
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        this.handleDBError(error, ACTION_FIND);
+      }
+      throw error;
+    }
+  }
 
   async update(input: UpdateResourceRepositoryDto): Promise<Resource> {
     const { title, url, status, id } = input;

@@ -9,7 +9,9 @@ import { UpdateResourceRepositoryDto } from '../dtos/repository/resource/update.
 
 export abstract class ResourceRepository {
   abstract find(query: FindResourceRepositoryDto): Promise<Resource[]>;
+  abstract findByResourceIds(resourceIds: number[]): Promise<Resource[]>;
   abstract get(id: number): Promise<Resource>;
+  abstract getRandom(size: number): Promise<number[]>;
   abstract findByParticipantIds(
     query: FindByParticipantIdsRepositoryDto,
   ): Promise<Resource[]>;

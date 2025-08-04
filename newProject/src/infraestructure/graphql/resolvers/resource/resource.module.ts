@@ -9,6 +9,7 @@ import { FlagsByResourceLoader } from 'src/infraestructure/common/dataloaders/fl
 import { GetFlagsByResourceIdsUseCase } from 'src/application/use-cases/flag/get-by-resource.use-case';
 import { GetResourceUseCase } from 'src/application/use-cases/resource/get-resource.use-case';
 import { UpdateResourceUseCase } from 'src/application/use-cases/resource/update.use-case';
+import { GetRandomResourceUseCase } from 'src/application/use-cases/resource/get-random.use-case';
 
 @Module({
   providers: [
@@ -19,6 +20,7 @@ import { UpdateResourceUseCase } from 'src/application/use-cases/resource/update
     GetParticipantsByResourceIdsUseCase,
     CreateResourceUseCase,
     GetFlagsByResourceIdsUseCase,
+    GetRandomResourceUseCase,
 
     ParticipantsByResourceLoader,
     FlagsByResourceLoader,

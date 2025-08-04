@@ -36,7 +36,7 @@ async function migrate() {
         `INSERT INTO "Resource" (title, url, status, "createdAt", "updatedAt")
          VALUES ($1, $2, $3, $4, $4)
          RETURNING id`,
-        [title, url, resets?.length ? 'OVERWRITTEN' : 'PENDING', new Date(audi_createdDate)]
+        [title, url, resets?.length > 0 ? 'OVERWRITTEN' : 'PENDING', new Date(audi_createdDate)]
       );
 
       const parentId = mainResult.rows[0].id;
@@ -50,7 +50,7 @@ async function migrate() {
           await pgClient.query(
             `INSERT INTO "Resource" (title, url, status, "parentId", "createdAt", "updatedAt")
              VALUES ($1, $2, $3, $4, $5, $5)`,
-            [title, reset.url, 'PENDING', parentId, new Date(reset.audi_createdDate)]
+            [title, reset.url, active ? 'PENDING' : 'OVERWRITTEN', parentId, new Date(reset.audi_createdDate)]
           );
         }
       }

@@ -9,13 +9,13 @@ import { Resource } from 'src/domain/resource';
 export class PrismaResourceMapper {
   static toDomain(
     entity: PrismaResource & {
-      participants?: Participant[];
-      flags?: Flag[];
+      participants?: Partial<Participant>[];
+      flags?: Partial<Flag>[];
     },
   ): Resource {
     const { participants, flags } = entity;
-    const participantIds = participants?.map((rp) => rp.id) || [];
-    const flagIds = flags?.map((rp) => rp.id) || [];
+    const participantIds = participants?.map((rp) => rp.id!) || [];
+    const flagIds = flags?.map((rp) => rp.id!) || [];
     return new Resource({
       id: entity.id,
       uuid: entity.uuid ?? '',
