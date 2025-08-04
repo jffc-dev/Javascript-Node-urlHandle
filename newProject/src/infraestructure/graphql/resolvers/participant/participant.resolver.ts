@@ -8,12 +8,12 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { Participant } from '../../entities/participant.entity';
-import { CreateParticipantInput } from 'src/application/dtos/requests/create-participant.input';
+import { CreateParticipantInput } from 'src/application/dtos/requests/participant/create-participant.input';
 import { ListParticipantsUseCase } from 'src/application/use-cases/participant/list.use-case';
 import { CreateParticipantUseCase } from 'src/application/use-cases/participant/create.use-case';
 import { Resource } from '../../entities/resource.entity';
 import { ResourcesByParticipantLoader } from 'src/infraestructure/common/dataloaders/resources-by-participant.loader';
-import { UpdateParticipantInput } from 'src/application/dtos/requests/update-participant.input';
+import { UpdateParticipantInput } from 'src/application/dtos/requests/participant/update-participant.input';
 import { UpdateParticipantUseCase } from 'src/application/use-cases/participant/update.use-case';
 
 @UsePipes(
@@ -41,10 +41,10 @@ export class ParticipantResolver {
     @Args('data') data: CreateParticipantInput,
   ): Promise<Participant> {
     const { name } = data;
-    const cartDetail = await this.createParticipantUseCase.execute({
+    const participant = await this.createParticipantUseCase.execute({
       name,
     });
-    return Participant.fromDomainToEntity(cartDetail);
+    return Participant.fromDomainToEntity(participant);
   }
 
   @Mutation(() => Participant, { name: 'updateParticipant' })
@@ -52,11 +52,11 @@ export class ParticipantResolver {
     @Args('data') data: UpdateParticipantInput,
   ): Promise<Participant> {
     const { id, name } = data;
-    const cartDetail = await this.updateParticipantUseCase.execute({
+    const participant = await this.updateParticipantUseCase.execute({
       id,
       name,
     });
-    return Participant.fromDomainToEntity(cartDetail);
+    return Participant.fromDomainToEntity(participant);
   }
 
   @ResolveField(() => [Resource], { name: 'resources' })

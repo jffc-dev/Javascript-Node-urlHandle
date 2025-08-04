@@ -10,6 +10,7 @@ interface ResourceProps {
   title: string;
   url: string;
   status: ResourceStatus;
+  parentId: number | null;
   parent: Resource | null;
   children: Resource[];
   flags: Flag[];
@@ -73,6 +74,10 @@ export class Resource {
     return this._participantIds;
   }
 
+  public get parentId(): number | null {
+    return this._parentId;
+  }
+
   public set id(value: number) {
     this._id = value;
   }
@@ -125,6 +130,10 @@ export class Resource {
     this._participantIds = value;
   }
 
+  public set parentId(value: number | null) {
+    this._parentId = value;
+  }
+
   constructor(input: ResourceProps) {
     this._id = input.id;
     this._uuid = input.uuid;
@@ -135,6 +144,7 @@ export class Resource {
     this._children = input.children;
     this._flags = input.flags;
     this._participants = input.participants;
+    this._parentId = input.parentId;
     this._ratings = input.ratings;
     this._participantIds = input.participantIds;
     this._createdAt = input.createdAt;
@@ -147,6 +157,7 @@ export class Resource {
   private _url: string;
   private _status: ResourceStatus;
   private _parent: Resource | null;
+  private _parentId: number | null;
   private _children: Resource[];
   private _flags: Flag[];
   private _participants: Participant[];

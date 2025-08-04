@@ -4,12 +4,14 @@ import { GetResourcesUseCase } from 'src/application/use-cases/resource/get-reso
 import { EnvModule } from 'src/infraestructure/env/env.module';
 import { ParticipantsByResourceLoader } from 'src/infraestructure/common/dataloaders/participants-by-resource.loader';
 import { GetParticipantsByResourceIdsUseCase } from 'src/application/use-cases/participant/get-by-resource.use-case';
+import { CreateResourceUseCase } from 'src/application/use-cases/resource/create.use-case';
 
 @Module({
   providers: [
     ResourceResolver,
     GetResourcesUseCase,
     GetParticipantsByResourceIdsUseCase,
+    CreateResourceUseCase,
 
     ParticipantsByResourceLoader,
   ],

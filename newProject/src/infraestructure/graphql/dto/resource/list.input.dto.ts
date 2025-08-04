@@ -1,15 +1,6 @@
-import { InputType, Field, Int, registerEnumType } from '@nestjs/graphql';
+import { InputType, Field, Int } from '@nestjs/graphql';
 import { IsEnum, IsInt, IsOptional } from 'class-validator';
-
-export enum ResourceStatus {
-  PENDING = 'PENDING',
-  APPROVED = 'APPROVED',
-  DELETED = 'DELETED',
-}
-
-registerEnumType(ResourceStatus, {
-  name: 'ResourceStatus',
-});
+import { ResourceStatus } from 'generated/prisma';
 
 @InputType()
 export class ListResourcesInputDto {

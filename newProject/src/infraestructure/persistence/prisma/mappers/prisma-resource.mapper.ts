@@ -28,6 +28,7 @@ export class PrismaResourceMapper {
       participantIds: participantIds,
       updatedAt: entity.updatedAt,
       createdAt: entity.createdAt,
+      parentId: entity.parentId,
     });
   }
 

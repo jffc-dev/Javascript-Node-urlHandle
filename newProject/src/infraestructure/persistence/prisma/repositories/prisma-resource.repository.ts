@@ -2,15 +2,39 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { ResourceRepository } from 'src/application/contracts/resource.repository';
 import { Prisma } from 'generated/prisma';
-import { ACTION_FIND } from 'src/application/utils/constants';
+import { ACTION_CREATE, ACTION_FIND } from 'src/application/utils/constants';
 import { PrismaResourceMapper } from '../mappers/prisma-resource.mapper';
 import { Resource } from 'src/domain/resource';
 import { FindResourceRepositoryDto } from 'src/application/dtos/repository/resource/find-resource.dto';
 import { FindByParticipantIdsRepositoryDto } from 'src/application/dtos/repository/resource/find-by-participant-ids.dto';
+import { CreateResourceRepositoryDto } from 'src/application/dtos/repository/resource/create.dto';
 
 @Injectable()
 export class PrismaResourceRepository implements ResourceRepository {
   constructor(private prisma: PrismaService) {}
+
+  async create(input: CreateResourceRepositoryDto): Promise<Resource> {
+    const { title, url, parentId, status = 'PENDING' } = input;
+    try {
+      const resource = await this.prisma.resource.create({
+        data: {
+          title,
+          url,
+          status,
+          parent: {
+            connect: parentId ? { id: parentId } : undefined,
+          },
+        },
+      });
+
+      return PrismaResourceMapper.toDomain(resource);
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        this.handleDBError(error, ACTION_CREATE);
+      }
+      throw error;
+    }
+  }
 
   async find(query: FindResourceRepositoryDto): Promise<Resource[]> {
     const { page, limit, filter } = query;

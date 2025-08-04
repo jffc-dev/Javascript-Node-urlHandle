@@ -6,10 +6,10 @@ import { ListParticipantsRepositoryDto } from 'src/application/dtos/repository/l
 import { PrismaParticipantMapper } from '../mappers/prisma-participant.mapper';
 import { Prisma } from 'generated/prisma';
 import { ACTION_FIND, ACTION_UPDATE } from 'src/application/utils/constants';
-import { CreateParticipantRepositoryDto } from 'src/application/dtos/repository/create-participants.dto';
+import { CreateParticipantRepositoryDto } from 'src/application/dtos/repository/participant/create-participants.dto';
 import { FindByIdsParticipantDto } from 'src/application/dtos/repository/participant/find-by-ids.dto';
 import { FindByResourceIdsRepositoryDto } from 'src/application/dtos/repository/participant/find-by-resource-ids.dto';
-import { UpdateParticipantRepositoryDto } from 'src/application/dtos/repository/participant/create-participants.dto copy';
+import { UpdateParticipantRepositoryDto } from 'src/application/dtos/repository/participant/update-participants.dto';
 
 @Injectable()
 export class PrismaParticipantRepository implements ParticipantRepository {

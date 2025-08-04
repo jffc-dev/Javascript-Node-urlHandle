@@ -1,9 +1,9 @@
 import { Participant } from 'src/domain/participant';
 import { ListParticipantsRepositoryDto } from '../dtos/repository/list-participants.dto';
-import { CreateParticipantRepositoryDto } from '../dtos/repository/create-participants.dto';
+import { CreateParticipantRepositoryDto } from '../dtos/repository/participant/create-participants.dto';
 import { FindByIdsParticipantDto } from '../dtos/repository/participant/find-by-ids.dto';
 import { FindByResourceIdsRepositoryDto } from '../dtos/repository/participant/find-by-resource-ids.dto';
-import { UpdateParticipantRepositoryDto } from '../dtos/repository/participant/create-participants.dto copy';
+import { UpdateParticipantRepositoryDto } from '../dtos/repository/participant/update-participants.dto';
 
 export abstract class ParticipantRepository {
   abstract list(query: ListParticipantsRepositoryDto): Promise<Participant[]>;

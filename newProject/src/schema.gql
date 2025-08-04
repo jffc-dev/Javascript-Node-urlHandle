@@ -19,9 +19,16 @@ type Resource {
   id: Int!
   title: String!
   url: String!
+  status: ResourceStatusGQL!
   createdAt: DateTime
   updatedAt: DateTime
   participants: [Participant!]!
+}
+
+enum ResourceStatusGQL {
+  PENDING
+  APPROVED
+  DELETED
 }
 
 type Query {
@@ -33,18 +40,13 @@ input ListResourcesInputDto {
   participantId: Int
   page: Int
   limit: Int
-  status: [ResourceStatus!]
-}
-
-enum ResourceStatus {
-  PENDING
-  APPROVED
-  DELETED
+  status: [ResourceStatusGQL!]
 }
 
 type Mutation {
   createParticipant(data: CreateParticipantInput!): Participant!
   updateParticipant(data: UpdateParticipantInput!): Participant!
+  createResource(data: CreateResourceInput!): Resource!
 }
 
 input CreateParticipantInput {
@@ -54,4 +56,11 @@ input CreateParticipantInput {
 input UpdateParticipantInput {
   id: Float!
   name: String
+}
+
+input CreateResourceInput {
+  title: String!
+  url: String!
+  parentId: Float
+  status: ResourceStatusGQL
 }

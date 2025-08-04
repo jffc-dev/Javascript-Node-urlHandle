@@ -1,5 +1,10 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { ResourceStatus } from 'generated/prisma';
 import { Resource as DomainResource } from 'src/domain/resource';
+
+registerEnumType(ResourceStatus, {
+  name: 'ResourceStatusGQL',
+});
 
 @ObjectType()
 export class Resource {
@@ -12,6 +17,9 @@ export class Resource {
   @Field(() => String)
   url: string;
 
+  @Field(() => ResourceStatus)
+  status: ResourceStatus;
+
   @Field(() => Date, { nullable: true })
   createdAt?: Date;
 
@@ -23,6 +31,7 @@ export class Resource {
       id: domainObject.id,
       title: domainObject.title,
       url: domainObject.url,
+      status: domainObject.status,
       createdAt: domainObject.createdAt,
       updatedAt: domainObject.updatedAt,
     };
