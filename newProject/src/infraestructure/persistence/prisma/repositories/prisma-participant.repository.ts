@@ -48,7 +48,7 @@ export class PrismaParticipantRepository implements ParticipantRepository {
       const prismaTx = this.clientManager.getClient();
       const participants = await prismaTx.participant.findMany({
         where: {
-          resouces: {
+          resources: {
             some: {
               id: {
                 in: resourceIds,
@@ -57,7 +57,7 @@ export class PrismaParticipantRepository implements ParticipantRepository {
           },
         },
         include: {
-          resouces: true,
+          resources: true,
         },
       });
 

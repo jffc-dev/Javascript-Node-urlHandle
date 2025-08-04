@@ -14,6 +14,10 @@ import { ParticipantsByResourceLoader } from 'src/infraestructure/common/dataloa
 import { ListResourcesInputDto } from '../../dto/resource/list.input.dto';
 import { CreateResourceInput } from 'src/application/dtos/requests/resource/create-resource.input';
 import { CreateResourceUseCase } from 'src/application/use-cases/resource/create.use-case';
+import { Flag } from '../../entities/flag.entity';
+import { FlagsByResourceLoader } from 'src/infraestructure/common/dataloaders/flags-by-resource.loader';
+import { GetResourceInputDto } from '../../dto/resource/get.dto';
+import { GetResourceUseCase } from 'src/application/use-cases/resource/get-resource.use-case';
 
 @UsePipes(
   new ValidationPipe({
@@ -24,8 +28,10 @@ import { CreateResourceUseCase } from 'src/application/use-cases/resource/create
 export class ResourceResolver {
   constructor(
     private readonly getResourcesUseCase: GetResourcesUseCase,
+    private readonly getResourceUseCase: GetResourceUseCase,
     private readonly createResourceUseCase: CreateResourceUseCase,
     private readonly participantsByResourceLoader: ParticipantsByResourceLoader,
+    private readonly flagsByResourceLoader: FlagsByResourceLoader,
   ) {}
 
   @Query(() => [Resource], { name: 'listResources' })
@@ -33,14 +39,26 @@ export class ResourceResolver {
     return this.getResourcesUseCase.execute(input);
   }
 
+  @Query(() => Resource, { name: 'getResource' })
+  get(@Args('input') input: GetResourceInputDto) {
+    return this.getResourceUseCase.execute(input);
+  }
+
   @ResolveField(() => [Participant], { name: 'participants' })
   async participants(@Parent() resource: Resource): Promise<Participant[]> {
     const participants = await this.participantsByResourceLoader.load(
       resource.id,
     );
-    return participants.map((resource) =>
-      Participant.fromDomainToEntity(resource),
+    return participants.map((participant) =>
+      Participant.fromDomainToEntity(participant),
     );
+  }
+
+  @ResolveField(() => [Flag], { name: 'flags' })
+  async flags(@Parent() resource: Resource): Promise<Flag[]> {
+    console.log(resource.id);
+    const participants = await this.flagsByResourceLoader.load(resource.id);
+    return participants.map((flag) => Flag.fromDomainToEntity(flag));
   }
 
   @Mutation(() => Resource, { name: 'createResource' })

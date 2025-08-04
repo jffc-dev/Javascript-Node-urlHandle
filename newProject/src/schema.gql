@@ -15,22 +15,6 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type Resource {
-  id: Int!
-  title: String!
-  url: String!
-  status: ResourceStatusGQL!
-  createdAt: DateTime
-  updatedAt: DateTime
-  participants: [Participant!]!
-}
-
-enum ResourceStatusGQL {
-  PENDING
-  APPROVED
-  DELETED
-}
-
 type Flag {
   id: Int!
   name: String!
@@ -39,9 +23,27 @@ type Flag {
   resources: [Resource!]!
 }
 
+type Resource {
+  id: Int!
+  title: String!
+  url: String!
+  status: ResourceStatusGQL!
+  createdAt: DateTime
+  updatedAt: DateTime
+  participants: [Participant!]
+  flags: [Flag!]
+}
+
+enum ResourceStatusGQL {
+  PENDING
+  APPROVED
+  DELETED
+}
+
 type Query {
   listParticipants: [Participant!]!
   listResources(input: ListResourcesInputDto!): [Resource!]!
+  getResource(input: GetResourceInputDto!): Resource!
   listFlags: [Flag!]!
 }
 
@@ -50,6 +52,10 @@ input ListResourcesInputDto {
   page: Int
   limit: Int
   status: [ResourceStatusGQL!]
+}
+
+input GetResourceInputDto {
+  id: Int!
 }
 
 type Mutation {
@@ -65,7 +71,7 @@ input CreateParticipantInput {
 }
 
 input UpdateParticipantInput {
-  id: Float!
+  id: Int!
   name: String
 }
 
@@ -83,6 +89,6 @@ input CreateFlagInput {
 }
 
 input UpdateFlagInput {
-  id: Float!
+  id: Int!
   name: String
 }

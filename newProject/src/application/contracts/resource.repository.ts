@@ -8,6 +8,7 @@ import { FindByFlagIdsRepositoryDto } from '../dtos/repository/resource/find-by-
 
 export abstract class ResourceRepository {
   abstract find(query: FindResourceRepositoryDto): Promise<Resource[]>;
+  abstract get(id: number): Promise<Resource>;
   abstract findByParticipantIds(
     query: FindByParticipantIdsRepositoryDto,
   ): Promise<Resource[]>;

@@ -46,7 +46,7 @@ export class PrismaFlagRepository implements FlagRepository {
       const prismaTx = this.clientManager.getClient();
       const flags = await prismaTx.flag.findMany({
         where: {
-          resouces: {
+          resources: {
             some: {
               id: {
                 in: resourceIds,
@@ -55,9 +55,10 @@ export class PrismaFlagRepository implements FlagRepository {
           },
         },
         include: {
-          resouces: true,
+          resources: true,
         },
       });
+      console.log('jffc1', flags);
 
       const data = flags.map((flag) => PrismaFlagMapper.toDomain(flag));
       return data;

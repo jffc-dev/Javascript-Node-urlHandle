@@ -8,6 +8,7 @@ export class PrismaFlagMapper {
     },
   ): Flag {
     const { resources } = entity;
+    console.log(resources, '22');
     const resourceIds = resources?.map((rp) => rp.id) || [];
     return new Flag({
       id: entity.id,

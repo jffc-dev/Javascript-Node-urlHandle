@@ -19,6 +19,29 @@ export class PrismaResourceRepository implements ResourceRepository {
     private prisma: PrismaService,
     private clientManager: PrismaClientManager,
   ) {}
+
+  async get(id: number): Promise<Resource> {
+    try {
+      const prismaTx = this.clientManager.getClient();
+      const resource = await prismaTx.resource.findUniqueOrThrow({
+        include: {
+          participants: true,
+          flags: true,
+        },
+        where: {
+          id,
+        },
+      });
+
+      return PrismaResourceMapper.toDomain(resource);
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        this.handleDBError(error, ACTION_FIND);
+      }
+      throw error;
+    }
+  }
+
   async setFlags(input: SetFlagsRepositoryDto): Promise<Resource | null> {
     const { id, flagIds } = input;
     try {

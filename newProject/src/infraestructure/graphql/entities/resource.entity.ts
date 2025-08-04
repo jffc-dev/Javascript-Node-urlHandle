@@ -1,6 +1,8 @@
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { ResourceStatus } from 'generated/prisma';
 import { Resource as DomainResource } from 'src/domain/resource';
+import { Flag } from './flag.entity';
+import { Participant } from './participant.entity';
 
 registerEnumType(ResourceStatus, {
   name: 'ResourceStatusGQL',
@@ -25,6 +27,12 @@ export class Resource {
 
   @Field(() => Date, { nullable: true })
   updatedAt: Date | null;
+
+  @Field(() => [Participant], { nullable: true })
+  participants?: Participant[];
+
+  @Field(() => [Flag], { nullable: true })
+  flags?: Flag[];
 
   static fromDomainToEntity(domainObject: DomainResource): Resource {
     return {

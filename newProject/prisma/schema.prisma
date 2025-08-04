@@ -46,7 +46,7 @@ model Flag {
   id                      Int                     @default(autoincrement()) @id
   uuid                    String?                 @default(dbgenerated("gen_random_uuid()")) @unique @db.Uuid
   name                    String                  @unique
-  resouces                Resource[]              @relation("ResourceFlags")
+  resources               Resource[]              @relation("ResourceFlags")
 
   createdAt               DateTime                @default(now())
   updatedAt               DateTime?               @updatedAt
@@ -56,7 +56,7 @@ model Participant {
   id                      Int                     @default(autoincrement()) @id
   uuid                    String?                 @default(dbgenerated("gen_random_uuid()")) @unique @db.Uuid
   name                    String                  @unique
-  resouces                Resource[]              @relation("ResourceParticipants")
+  resources               Resource[]              @relation("ResourceParticipants")
   
   createdAt               DateTime                @default(now())
   updatedAt               DateTime?               @updatedAt

@@ -156,6 +156,7 @@ export class Resource {
     this._parentId = input.parentId;
     this._ratings = input.ratings;
     this._participantIds = input.participantIds;
+    this._flagIds = input.flagIds;
     this._createdAt = input.createdAt;
     this._updatedAt = input.updatedAt;
   }

@@ -12,6 +12,7 @@ export class PrismaParticipantMapper {
     },
   ): Participant {
     const { resources } = entity;
+    console.log(resources, '11');
     const resourceIds = resources?.map((rp) => rp.id) || [];
     return new Participant({
       id: entity.id,
