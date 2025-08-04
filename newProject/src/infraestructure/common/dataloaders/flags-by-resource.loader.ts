@@ -15,7 +15,6 @@ export class FlagsByResourceLoader extends DataLoader<number, Flag[]> {
     const resources = await this.getFlagsByResourceIdsUseCase.execute({
       resourceIds,
     });
-    console.log('pp', resources);
 
     const mappedResources = this.mapResults(resourceIds, resources);
 

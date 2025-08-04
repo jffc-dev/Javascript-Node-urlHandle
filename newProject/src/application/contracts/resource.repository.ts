@@ -5,6 +5,7 @@ import { CreateResourceRepositoryDto } from '../dtos/repository/resource/create.
 import { SetParticipantsRepositoryDto } from '../dtos/repository/resource/set-participants.dto';
 import { SetFlagsRepositoryDto } from '../dtos/repository/resource/set-flags.dto';
 import { FindByFlagIdsRepositoryDto } from '../dtos/repository/resource/find-by-flag-ids.dto';
+import { UpdateResourceRepositoryDto } from '../dtos/repository/resource/update.dto';
 
 export abstract class ResourceRepository {
   abstract find(query: FindResourceRepositoryDto): Promise<Resource[]>;
@@ -16,6 +17,7 @@ export abstract class ResourceRepository {
     query: FindByFlagIdsRepositoryDto,
   ): Promise<Resource[]>;
   abstract create(input: CreateResourceRepositoryDto): Promise<Resource>;
+  abstract update(input: UpdateResourceRepositoryDto): Promise<Resource>;
   abstract setParticipants(
     input: SetParticipantsRepositoryDto,
   ): Promise<Resource | null>;

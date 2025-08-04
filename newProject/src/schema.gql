@@ -38,6 +38,7 @@ enum ResourceStatusGQL {
   PENDING
   APPROVED
   DELETED
+  OVERWRITTEN
 }
 
 type Query {
@@ -62,6 +63,7 @@ type Mutation {
   createParticipant(data: CreateParticipantInput!): Participant!
   updateParticipant(data: UpdateParticipantInput!): Participant!
   createResource(data: CreateResourceInput!): Resource!
+  updateResource(data: UpdateResourceInput!): Resource!
   createFlag(data: CreateFlagInput!): Flag!
   updateFlag(data: UpdateFlagInput!): Flag!
 }
@@ -80,8 +82,17 @@ input CreateResourceInput {
   url: String!
   parentId: Float
   status: ResourceStatusGQL
-  participantIds: [Float!]
-  flagIds: [Float!]
+  participantIds: [Int!]
+  flagIds: [Int!]
+}
+
+input UpdateResourceInput {
+  id: Int!
+  title: String!
+  url: String!
+  status: ResourceStatusGQL!
+  participantIds: [Int!]
+  flagIds: [Int!]
 }
 
 input CreateFlagInput {

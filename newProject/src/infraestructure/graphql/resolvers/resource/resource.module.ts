@@ -8,12 +8,14 @@ import { CreateResourceUseCase } from 'src/application/use-cases/resource/create
 import { FlagsByResourceLoader } from 'src/infraestructure/common/dataloaders/flags-by-resource.loader';
 import { GetFlagsByResourceIdsUseCase } from 'src/application/use-cases/flag/get-by-resource.use-case';
 import { GetResourceUseCase } from 'src/application/use-cases/resource/get-resource.use-case';
+import { UpdateResourceUseCase } from 'src/application/use-cases/resource/update.use-case';
 
 @Module({
   providers: [
     ResourceResolver,
     GetResourcesUseCase,
     GetResourceUseCase,
+    UpdateResourceUseCase,
     GetParticipantsByResourceIdsUseCase,
     CreateResourceUseCase,
     GetFlagsByResourceIdsUseCase,

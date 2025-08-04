@@ -12,6 +12,7 @@ import { SetParticipantsRepositoryDto } from 'src/application/dtos/repository/re
 import { SetFlagsRepositoryDto } from 'src/application/dtos/repository/resource/set-flags.dto';
 import { PrismaClientManager } from '../prisma-client-manager';
 import { FindByFlagIdsRepositoryDto } from 'src/application/dtos/repository/resource/find-by-flag-ids.dto';
+import { UpdateResourceRepositoryDto } from 'src/application/dtos/repository/resource/update.dto';
 
 @Injectable()
 export class PrismaResourceRepository implements ResourceRepository {
@@ -19,6 +20,28 @@ export class PrismaResourceRepository implements ResourceRepository {
     private prisma: PrismaService,
     private clientManager: PrismaClientManager,
   ) {}
+
+  async update(input: UpdateResourceRepositoryDto): Promise<Resource> {
+    const { title, url, status, id } = input;
+    try {
+      const prismaTx = this.clientManager.getClient();
+      const resource = await prismaTx.resource.update({
+        where: { id },
+        data: {
+          title,
+          url,
+          status,
+        },
+      });
+
+      return PrismaResourceMapper.toDomain(resource);
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        this.handleDBError(error, ACTION_CREATE);
+      }
+      throw error;
+    }
+  }
 
   async get(id: number): Promise<Resource> {
     try {

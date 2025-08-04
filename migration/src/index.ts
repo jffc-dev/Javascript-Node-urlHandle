@@ -1,7 +1,7 @@
 import { MongoClient } from "mongodb";
 import { Client } from "pg";
 
-const mongoUrl = 'mongodb://localhost:27017';
+const mongoUrl = 'mongodb://localhost:27016';
 const mongoDbName = 'manejoCadenas';
 
 const pgClient = new Client({
@@ -33,10 +33,10 @@ async function migrate() {
 
       // Insert main resource
       const mainResult = await pgClient.query(
-        `INSERT INTO "Resource" (title, url, active, "createdAt", "updatedAt")
+        `INSERT INTO "Resource" (title, url, status, "createdAt", "updatedAt")
          VALUES ($1, $2, $3, $4, $4)
          RETURNING id`,
-        [title, url, resets?.length ? false : true, new Date(audi_createdDate)]
+        [title, url, resets?.length ? 'OVERWRITTEN' : 'PENDING', new Date(audi_createdDate)]
       );
 
       const parentId = mainResult.rows[0].id;
@@ -48,9 +48,9 @@ async function migrate() {
           const active = i === resets.length - 1;
 
           await pgClient.query(
-            `INSERT INTO "Resource" (title, url, active, "parentId", "createdAt", "updatedAt")
+            `INSERT INTO "Resource" (title, url, status, "parentId", "createdAt", "updatedAt")
              VALUES ($1, $2, $3, $4, $5, $5)`,
-            [title, reset.url, active, parentId, new Date(reset.audi_createdDate)]
+            [title, reset.url, 'PENDING', parentId, new Date(reset.audi_createdDate)]
           );
         }
       }

@@ -2,7 +2,7 @@ import { Flag } from './flag';
 import { Participant } from './participant';
 import { Rating } from './rating';
 
-type ResourceStatus = 'PENDING' | 'APPROVED' | 'DELETED';
+type ResourceStatus = 'PENDING' | 'APPROVED' | 'DELETED' | 'OVERWRITTEN';
 
 interface ResourceProps {
   id: number;

@@ -3,7 +3,11 @@ import { IsEnum, IsNumber, IsOptional, IsString, IsUrl } from 'class-validator';
 import { ResourceStatus } from 'generated/prisma';
 
 @InputType()
-export class CreateResourceInput {
+export class UpdateResourceInput {
+  @Field(() => Int)
+  @IsNumber()
+  id: number;
+
   @Field(() => String)
   @IsString()
   title: string;
@@ -12,14 +16,10 @@ export class CreateResourceInput {
   @IsUrl()
   url: string;
 
-  @Field(() => Number, { nullable: true })
-  @IsNumber()
-  parentId?: number;
-
   @IsOptional()
   @IsEnum(ResourceStatus)
-  @Field(() => ResourceStatus, { nullable: true })
-  status?: ResourceStatus;
+  @Field(() => ResourceStatus)
+  status: ResourceStatus;
 
   @IsOptional()
   @Field(() => [Int], { nullable: true })

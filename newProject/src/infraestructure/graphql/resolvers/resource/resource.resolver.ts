@@ -18,6 +18,8 @@ import { Flag } from '../../entities/flag.entity';
 import { FlagsByResourceLoader } from 'src/infraestructure/common/dataloaders/flags-by-resource.loader';
 import { GetResourceInputDto } from '../../dto/resource/get.dto';
 import { GetResourceUseCase } from 'src/application/use-cases/resource/get-resource.use-case';
+import { UpdateResourceInput } from 'src/application/dtos/requests/resource/update-resource.input';
+import { UpdateResourceUseCase } from 'src/application/use-cases/resource/update.use-case';
 
 @UsePipes(
   new ValidationPipe({
@@ -30,6 +32,7 @@ export class ResourceResolver {
     private readonly getResourcesUseCase: GetResourcesUseCase,
     private readonly getResourceUseCase: GetResourceUseCase,
     private readonly createResourceUseCase: CreateResourceUseCase,
+    private readonly updateResourceUseCase: UpdateResourceUseCase,
     private readonly participantsByResourceLoader: ParticipantsByResourceLoader,
     private readonly flagsByResourceLoader: FlagsByResourceLoader,
   ) {}
@@ -56,7 +59,6 @@ export class ResourceResolver {
 
   @ResolveField(() => [Flag], { name: 'flags' })
   async flags(@Parent() resource: Resource): Promise<Flag[]> {
-    console.log(resource.id);
     const participants = await this.flagsByResourceLoader.load(resource.id);
     return participants.map((flag) => Flag.fromDomainToEntity(flag));
   }
@@ -72,6 +74,24 @@ export class ResourceResolver {
       participantIds,
       flagIds,
     });
+    return Resource.fromDomainToEntity(resource);
+  }
+
+  @Mutation(() => Resource, { name: 'updateResource' })
+  async update(@Args('data') data: UpdateResourceInput): Promise<Resource> {
+    const { id, url, title, status, participantIds, flagIds } = data;
+    const resource = await this.updateResourceUseCase.execute({
+      id,
+      url,
+      title,
+      status,
+      participantIds,
+      flagIds,
+    });
+
+    this.participantsByResourceLoader.clear(id);
+    this.flagsByResourceLoader.clear(id);
+
     return Resource.fromDomainToEntity(resource);
   }
 }
