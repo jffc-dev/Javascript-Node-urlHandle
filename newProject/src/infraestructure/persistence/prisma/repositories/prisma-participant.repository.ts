@@ -5,10 +5,11 @@ import { Participant } from 'src/domain/participant';
 import { ListParticipantsRepositoryDto } from 'src/application/dtos/repository/list-participants.dto';
 import { PrismaParticipantMapper } from '../mappers/prisma-participant.mapper';
 import { Prisma } from 'generated/prisma';
-import { ACTION_FIND } from 'src/application/utils/constants';
+import { ACTION_FIND, ACTION_UPDATE } from 'src/application/utils/constants';
 import { CreateParticipantRepositoryDto } from 'src/application/dtos/repository/create-participants.dto';
 import { FindByIdsParticipantDto } from 'src/application/dtos/repository/participant/find-by-ids.dto';
 import { FindByResourceIdsRepositoryDto } from 'src/application/dtos/repository/participant/find-by-resource-ids.dto';
+import { UpdateParticipantRepositoryDto } from 'src/application/dtos/repository/participant/create-participants.dto copy';
 
 @Injectable()
 export class PrismaParticipantRepository implements ParticipantRepository {
@@ -101,6 +102,26 @@ export class PrismaParticipantRepository implements ParticipantRepository {
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         this.handleDBError(error, ACTION_FIND);
+      }
+      throw error;
+    }
+  }
+
+  async update(input: UpdateParticipantRepositoryDto): Promise<Participant> {
+    const { id, name } = input;
+    try {
+      const participant = await this.prisma.participant.update({
+        where: {
+          id,
+        },
+        data: {
+          name,
+        },
+      });
+      return PrismaParticipantMapper.toDomain(participant);
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        this.handleDBError(error, ACTION_UPDATE);
       }
       throw error;
     }

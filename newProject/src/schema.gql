@@ -44,8 +44,14 @@ enum ResourceStatus {
 
 type Mutation {
   createParticipant(data: CreateParticipantInput!): Participant!
+  updateParticipant(data: UpdateParticipantInput!): Participant!
 }
 
 input CreateParticipantInput {
   name: String!
+}
+
+input UpdateParticipantInput {
+  id: Float!
+  name: String
 }

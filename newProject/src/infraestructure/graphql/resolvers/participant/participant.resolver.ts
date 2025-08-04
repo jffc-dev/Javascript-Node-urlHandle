@@ -13,6 +13,8 @@ import { ListParticipantsUseCase } from 'src/application/use-cases/participant/l
 import { CreateParticipantUseCase } from 'src/application/use-cases/participant/create.use-case';
 import { Resource } from '../../entities/resource.entity';
 import { ResourcesByParticipantLoader } from 'src/infraestructure/common/dataloaders/resources-by-participant.loader';
+import { UpdateParticipantInput } from 'src/application/dtos/requests/update-participant.input';
+import { UpdateParticipantUseCase } from 'src/application/use-cases/participant/update.use-case';
 
 @UsePipes(
   new ValidationPipe({
@@ -24,6 +26,7 @@ export class ParticipantResolver {
   constructor(
     private readonly createParticipantUseCase: CreateParticipantUseCase,
     private readonly listParticipantsUseCase: ListParticipantsUseCase,
+    private readonly updateParticipantUseCase: UpdateParticipantUseCase,
 
     private readonly resourceByParticipantLoader: ResourcesByParticipantLoader,
   ) {}
@@ -39,6 +42,18 @@ export class ParticipantResolver {
   ): Promise<Participant> {
     const { name } = data;
     const cartDetail = await this.createParticipantUseCase.execute({
+      name,
+    });
+    return Participant.fromDomainToEntity(cartDetail);
+  }
+
+  @Mutation(() => Participant, { name: 'updateParticipant' })
+  async update(
+    @Args('data') data: UpdateParticipantInput,
+  ): Promise<Participant> {
+    const { id, name } = data;
+    const cartDetail = await this.updateParticipantUseCase.execute({
+      id,
       name,
     });
     return Participant.fromDomainToEntity(cartDetail);

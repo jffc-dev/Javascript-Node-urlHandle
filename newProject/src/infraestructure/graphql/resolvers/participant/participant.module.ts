@@ -5,6 +5,7 @@ import { EnvModule } from 'src/infraestructure/env/env.module';
 import { CreateParticipantUseCase } from 'src/application/use-cases/participant/create.use-case';
 import { ResourcesByParticipantLoader } from 'src/infraestructure/common/dataloaders/resources-by-participant.loader';
 import { GetResourcesByParticipantIdsUseCase } from 'src/application/use-cases/resource/get-by-participant.use-case';
+import { UpdateParticipantUseCase } from 'src/application/use-cases/participant/update.use-case';
 
 @Module({
   providers: [
@@ -12,6 +13,7 @@ import { GetResourcesByParticipantIdsUseCase } from 'src/application/use-cases/r
     ListParticipantsUseCase,
     CreateParticipantUseCase,
     GetResourcesByParticipantIdsUseCase,
+    UpdateParticipantUseCase,
 
     ResourcesByParticipantLoader,
   ],
