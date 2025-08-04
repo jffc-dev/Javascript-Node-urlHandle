@@ -5,11 +5,15 @@ import { ResourceRepository } from 'src/application/contracts/resource.repositor
 import { PrismaResourceRepository } from './repositories/prisma-resource.repository';
 import { ParticipantRepository } from 'src/application/contracts/participant.repository';
 import { PrismaParticipantRepository } from './repositories/prisma-participant.repository';
+import { TransactionManager } from 'src/application/contracts/transaction-manager';
+import { PrismaTransactionManager } from './prisma-transaction-manager';
+import { PrismaClientManager } from './prisma-client-manager';
 
 @Module({
   imports: [EnvModule],
   providers: [
     PrismaService,
+    PrismaClientManager,
     {
       provide: ResourceRepository,
       useClass: PrismaResourceRepository,
@@ -18,7 +22,13 @@ import { PrismaParticipantRepository } from './repositories/prisma-participant.r
       provide: ParticipantRepository,
       useClass: PrismaParticipantRepository,
     },
+    { provide: TransactionManager, useClass: PrismaTransactionManager },
   ],
-  exports: [ResourceRepository, ParticipantRepository],
+  exports: [
+    ResourceRepository,
+    ParticipantRepository,
+    TransactionManager,
+    PrismaService,
+  ],
 })
 export class PrismaModule {}

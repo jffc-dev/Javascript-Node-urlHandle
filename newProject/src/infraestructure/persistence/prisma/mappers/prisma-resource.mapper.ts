@@ -1,19 +1,21 @@
 import {
+  Flag,
+  Participant,
   Prisma,
   Resource as PrismaResource,
-  ResourceParticipant,
 } from 'generated/prisma';
 import { Resource } from 'src/domain/resource';
 
 export class PrismaResourceMapper {
   static toDomain(
     entity: PrismaResource & {
-      resourceParticipants?: ResourceParticipant[];
+      participants?: Participant[];
+      flags?: Flag[];
     },
   ): Resource {
-    const { resourceParticipants } = entity;
-    const participantIds =
-      resourceParticipants?.map((rp) => rp.participantId) || [];
+    const { participants, flags } = entity;
+    const participantIds = participants?.map((rp) => rp.id) || [];
+    const flagIds = flags?.map((rp) => rp.id) || [];
     return new Resource({
       id: entity.id,
       uuid: entity.uuid ?? '',
@@ -26,6 +28,7 @@ export class PrismaResourceMapper {
       participants: [],
       ratings: [],
       participantIds: participantIds,
+      flagIds: flagIds,
       updatedAt: entity.updatedAt,
       createdAt: entity.createdAt,
       parentId: entity.parentId,

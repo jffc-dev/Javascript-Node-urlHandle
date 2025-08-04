@@ -8,15 +8,73 @@ import { Resource } from 'src/domain/resource';
 import { FindResourceRepositoryDto } from 'src/application/dtos/repository/resource/find-resource.dto';
 import { FindByParticipantIdsRepositoryDto } from 'src/application/dtos/repository/resource/find-by-participant-ids.dto';
 import { CreateResourceRepositoryDto } from 'src/application/dtos/repository/resource/create.dto';
+import { SetParticipantsRepositoryDto } from 'src/application/dtos/repository/participant/set-participants.dto';
+import { SetFlagsRepositoryDto } from 'src/application/dtos/repository/participant/set-flags.dto';
+import { PrismaClientManager } from '../prisma-client-manager';
 
 @Injectable()
 export class PrismaResourceRepository implements ResourceRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private clientManager: PrismaClientManager,
+  ) {}
+  async setFlags(input: SetFlagsRepositoryDto): Promise<Resource | null> {
+    const { id, flagIds } = input;
+    try {
+      const prismaTx = this.clientManager.getClient();
+      const resource = await prismaTx.resource.update({
+        where: { id },
+        data: {
+          flags: {
+            set: flagIds,
+          },
+        },
+        include: {
+          flags: true,
+        },
+      });
+
+      return PrismaResourceMapper.toDomain(resource);
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        this.handleDBError(error, ACTION_CREATE);
+      }
+      throw error;
+    }
+  }
+
+  async setParticipants(
+    input: SetParticipantsRepositoryDto,
+  ): Promise<Resource | null> {
+    const { id, participantds } = input;
+    try {
+      const prismaTx = this.clientManager.getClient();
+      const resource = await prismaTx.resource.update({
+        where: { id },
+        data: {
+          participants: {
+            set: participantds,
+          },
+        },
+        include: {
+          participants: true,
+        },
+      });
+
+      return PrismaResourceMapper.toDomain(resource);
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        this.handleDBError(error, ACTION_CREATE);
+      }
+      throw error;
+    }
+  }
 
   async create(input: CreateResourceRepositoryDto): Promise<Resource> {
     const { title, url, parentId, status = 'PENDING' } = input;
     try {
-      const resource = await this.prisma.resource.create({
+      const prismaTx = this.clientManager.getClient();
+      const resource = await prismaTx.resource.create({
         data: {
           title,
           url,
@@ -39,9 +97,10 @@ export class PrismaResourceRepository implements ResourceRepository {
   async find(query: FindResourceRepositoryDto): Promise<Resource[]> {
     const { page, limit, filter } = query;
     try {
-      const resources = await this.prisma.resource.findMany({
+      const prismaTx = this.clientManager.getClient();
+      const resources = await prismaTx.resource.findMany({
         include: {
-          resourceParticipants: true,
+          participants: true,
         },
         take: limit,
         skip: (page - 1) * limit,
@@ -69,14 +128,15 @@ export class PrismaResourceRepository implements ResourceRepository {
   ): Promise<Resource[]> {
     const { participantIds } = query;
     try {
-      const resources = await this.prisma.resource.findMany({
+      const prismaTx = this.clientManager.getClient();
+      const resources = await prismaTx.resource.findMany({
         include: {
-          resourceParticipants: true,
+          participants: true,
         },
         where: {
-          resourceParticipants: {
+          participants: {
             some: {
-              participantId: {
+              id: {
                 in: participantIds,
               },
             },

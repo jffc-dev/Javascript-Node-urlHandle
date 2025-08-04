@@ -10,15 +10,20 @@ import { CreateParticipantRepositoryDto } from 'src/application/dtos/repository/
 import { FindByIdsParticipantDto } from 'src/application/dtos/repository/participant/find-by-ids.dto';
 import { FindByResourceIdsRepositoryDto } from 'src/application/dtos/repository/participant/find-by-resource-ids.dto';
 import { UpdateParticipantRepositoryDto } from 'src/application/dtos/repository/participant/update-participants.dto';
+import { PrismaClientManager } from '../prisma-client-manager';
 
 @Injectable()
 export class PrismaParticipantRepository implements ParticipantRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private clientManager: PrismaClientManager,
+  ) {}
 
   async list(query: ListParticipantsRepositoryDto): Promise<Participant[]> {
     const { page, limit } = query;
     try {
-      const participants = await this.prisma.participant.findMany({
+      const prismaTx = this.clientManager.getClient();
+      const participants = await prismaTx.participant.findMany({
         take: limit,
         skip: (page - 1) * limit,
       });
@@ -40,18 +45,19 @@ export class PrismaParticipantRepository implements ParticipantRepository {
   ): Promise<Participant[]> {
     const { resourceIds } = query;
     try {
-      const participants = await this.prisma.participant.findMany({
+      const prismaTx = this.clientManager.getClient();
+      const participants = await prismaTx.participant.findMany({
         where: {
-          resourceParticipants: {
+          resouces: {
             some: {
-              resourceId: {
+              id: {
                 in: resourceIds,
               },
             },
           },
         },
         include: {
-          resourceParticipants: true,
+          resouces: true,
         },
       });
 
@@ -70,7 +76,8 @@ export class PrismaParticipantRepository implements ParticipantRepository {
   async findByIds(query: FindByIdsParticipantDto): Promise<Participant[]> {
     const { participantIds } = query;
     try {
-      const participants = await this.prisma.participant.findMany({
+      const prismaTx = this.clientManager.getClient();
+      const participants = await prismaTx.participant.findMany({
         where: {
           id: {
             in: participantIds,
@@ -93,7 +100,8 @@ export class PrismaParticipantRepository implements ParticipantRepository {
   async create(input: CreateParticipantRepositoryDto): Promise<Participant> {
     const { name } = input;
     try {
-      const participant = await this.prisma.participant.create({
+      const prismaTx = this.clientManager.getClient();
+      const participant = await prismaTx.participant.create({
         data: {
           name,
         },
@@ -110,7 +118,8 @@ export class PrismaParticipantRepository implements ParticipantRepository {
   async update(input: UpdateParticipantRepositoryDto): Promise<Participant> {
     const { id, name } = input;
     try {
-      const participant = await this.prisma.participant.update({
+      const prismaTx = this.clientManager.getClient();
+      const participant = await prismaTx.participant.update({
         where: {
           id,
         },

@@ -20,4 +20,14 @@ export class CreateResourceInput {
   @IsEnum(ResourceStatus)
   @Field(() => ResourceStatus, { nullable: true })
   status?: ResourceStatus;
+
+  @IsOptional()
+  @Field(() => [Number], { nullable: true })
+  @IsNumber({}, { each: true })
+  participantIds?: number[];
+
+  @IsOptional()
+  @Field(() => [Number], { nullable: true })
+  @IsNumber({}, { each: true })
+  flagIds?: number[];
 }

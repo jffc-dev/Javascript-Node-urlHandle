@@ -45,12 +45,14 @@ export class ResourceResolver {
 
   @Mutation(() => Resource, { name: 'createResource' })
   async create(@Args('data') data: CreateResourceInput): Promise<Resource> {
-    const { url, title, parentId, status } = data;
+    const { url, title, parentId, status, participantIds, flagIds } = data;
     const resource = await this.createResourceUseCase.execute({
       url,
       title,
       parentId,
       status,
+      participantIds,
+      flagIds,
     });
     return Resource.fromDomainToEntity(resource);
   }

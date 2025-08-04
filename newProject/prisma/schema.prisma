@@ -28,8 +28,8 @@ model Resource {
   parentId                Int?        
   parent                  Resource?               @relation("ResourceParent", fields: [parentId], references: [id])
   children                Resource[]              @relation("ResourceParent")
-  resourceFlags           ResourceFlag[]
-  resourceParticipants    ResourceParticipant[]
+  flags                   Flag[]                  @relation("ResourceFlags")
+  participants            Participant[]           @relation("ResourceParticipants")
   ratings                 Rating[]
 
   createdAt               DateTime                @default(now())
@@ -46,40 +46,20 @@ model Flag {
   id                      Int                     @default(autoincrement()) @id
   uuid                    String?                 @default(dbgenerated("gen_random_uuid()")) @unique @db.Uuid
   name                    String                  @unique
-  resourceFlags           ResourceFlag[]        
+  resouces                Resource[]              @relation("ResourceFlags")
 
   createdAt               DateTime                @default(now())
   updatedAt               DateTime?               @updatedAt
-}
-
-model ResourceFlag {
-  resourceId              Int
-  flagId                  Int
-  
-  resource                Resource                @relation(fields: [resourceId], references: [id])
-  flag                    Flag                    @relation(fields: [flagId], references: [id])
-
-  @@id([resourceId, flagId])
 }
 
 model Participant {
   id                      Int                     @default(autoincrement()) @id
   uuid                    String?                 @default(dbgenerated("gen_random_uuid()")) @unique @db.Uuid
   name                    String                  @unique
-  resourceParticipants    ResourceParticipant[]
+  resouces                Resource[]              @relation("ResourceParticipants")
   
   createdAt               DateTime                @default(now())
   updatedAt               DateTime?               @updatedAt
-}
-
-model ResourceParticipant {
-  resourceId              Int
-  participantId           Int
-
-  resource                Resource                @relation(fields: [resourceId], references: [id])
-  participant             Participant             @relation(fields: [participantId], references: [id])
-
-  @@id([resourceId, participantId])
 }
 
 model User {

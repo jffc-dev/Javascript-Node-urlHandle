@@ -4,7 +4,7 @@ interface ParticipantProps {
   id: number;
   uuid: string;
   name: string;
-  resourceParticipants: Resource[];
+  resources: Resource[];
   resourceIds: number[];
   createdAt: Date;
   updatedAt: Date | null;
@@ -23,8 +23,8 @@ export class Participant {
     return this._name;
   }
 
-  public get resourceParticipants(): Resource[] {
-    return this._resourceParticipants;
+  public get resources(): Resource[] {
+    return this._resources;
   }
 
   public get createdAt(): Date {
@@ -51,8 +51,8 @@ export class Participant {
     this._name = value;
   }
 
-  public set resourceParticipants(value: Resource[]) {
-    this._resourceParticipants = value;
+  public set resources(value: Resource[]) {
+    this._resources = value;
   }
 
   public set createdAt(value: Date) {
@@ -72,7 +72,7 @@ export class Participant {
     this._id = input.id;
     this._uuid = input.uuid;
     this._name = input.name;
-    this._resourceParticipants = input.resourceParticipants;
+    this._resources = input.resources;
     this._resourceIds = input.resourceIds;
     this._createdAt = input.createdAt;
     this._updatedAt = input.updatedAt;
@@ -81,7 +81,7 @@ export class Participant {
   private _id: number;
   private _uuid: string;
   private _name: string;
-  private _resourceParticipants: Resource[];
+  private _resources: Resource[];
   private _resourceIds: number[];
   private _createdAt: Date;
   private _updatedAt: Date | null;

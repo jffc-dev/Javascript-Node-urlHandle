@@ -2,6 +2,8 @@ import { Resource } from 'src/domain/resource';
 import { FindResourceRepositoryDto } from '../dtos/repository/resource/find-resource.dto';
 import { FindByParticipantIdsRepositoryDto } from '../dtos/repository/resource/find-by-participant-ids.dto';
 import { CreateResourceRepositoryDto } from '../dtos/repository/resource/create.dto';
+import { SetParticipantsRepositoryDto } from '../dtos/repository/participant/set-participants.dto';
+import { SetFlagsRepositoryDto } from '../dtos/repository/participant/set-flags.dto';
 
 export abstract class ResourceRepository {
   abstract find(query: FindResourceRepositoryDto): Promise<Resource[]>;
@@ -9,6 +11,10 @@ export abstract class ResourceRepository {
     query: FindByParticipantIdsRepositoryDto,
   ): Promise<Resource[]>;
   abstract create(input: CreateResourceRepositoryDto): Promise<Resource>;
+  abstract setParticipants(
+    input: SetParticipantsRepositoryDto,
+  ): Promise<Resource | null>;
+  abstract setFlags(input: SetFlagsRepositoryDto): Promise<Resource | null>;
 
   abstract handleDBError(error: any): void;
 }

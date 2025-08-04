@@ -1,23 +1,23 @@
 import {
   Prisma,
   Participant as PrismaParticipant,
-  ResourceParticipant,
+  Resource,
 } from 'generated/prisma';
 import { Participant } from 'src/domain/participant';
 
 export class PrismaParticipantMapper {
   static toDomain(
     entity: PrismaParticipant & {
-      resourceParticipants?: ResourceParticipant[];
+      resources?: Resource[];
     },
   ): Participant {
-    const { resourceParticipants } = entity;
-    const resourceIds = resourceParticipants?.map((rp) => rp.resourceId) || [];
+    const { resources } = entity;
+    const resourceIds = resources?.map((rp) => rp.id) || [];
     return new Participant({
       id: entity.id,
       uuid: entity.uuid ?? '',
       name: entity.name,
-      resourceParticipants: [],
+      resources: [],
       resourceIds: resourceIds,
       updatedAt: entity.updatedAt,
       createdAt: entity.createdAt,
