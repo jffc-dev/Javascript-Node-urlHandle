@@ -2,12 +2,14 @@ import { Flag } from './flag';
 import { Participant } from './participant';
 import { Rating } from './rating';
 
+type ResourceStatus = 'PENDING' | 'APPROVED' | 'DELETED';
+
 interface ResourceProps {
   id: number;
   uuid: string;
   title: string;
   url: string;
-  active: boolean;
+  status: ResourceStatus;
   parent: Resource | null;
   children: Resource[];
   flags: Flag[];
@@ -35,8 +37,8 @@ export class Resource {
     return this._url;
   }
 
-  public get active(): boolean {
-    return this._active;
+  public get status(): ResourceStatus {
+    return this._status;
   }
 
   public get parent(): Resource | null {
@@ -87,8 +89,8 @@ export class Resource {
     this._url = value;
   }
 
-  public set active(value: boolean) {
-    this._active = value;
+  public set status(value: ResourceStatus) {
+    this._status = value;
   }
 
   public set parent(value: Resource) {
@@ -128,7 +130,7 @@ export class Resource {
     this._uuid = input.uuid;
     this._title = input.title;
     this._url = input.url;
-    this._active = input.active;
+    this._status = input.status;
     this._parent = input.parent;
     this._children = input.children;
     this._flags = input.flags;
@@ -143,7 +145,7 @@ export class Resource {
   private _uuid: string;
   private _title: string;
   private _url: string;
-  private _active: boolean;
+  private _status: ResourceStatus;
   private _parent: Resource | null;
   private _children: Resource[];
   private _flags: Flag[];

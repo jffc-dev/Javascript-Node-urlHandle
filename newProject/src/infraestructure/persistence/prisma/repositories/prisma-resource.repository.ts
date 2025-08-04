@@ -22,7 +22,9 @@ export class PrismaResourceRepository implements ResourceRepository {
         take: limit,
         skip: (page - 1) * limit,
         where: {
-          ...filter,
+          status: {
+            in: filter.status,
+          },
         },
       });
 

@@ -1,3 +1,5 @@
+import { ResourceStatus } from 'generated/prisma';
+
 export interface FindResourceRepositoryDto {
   page: number;
   limit: number;
@@ -5,5 +7,5 @@ export interface FindResourceRepositoryDto {
 }
 
 interface FindResourceRepositoryFilter {
-  active: boolean;
+  status: ResourceStatus[];
 }

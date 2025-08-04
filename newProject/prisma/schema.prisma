@@ -24,7 +24,7 @@ model Resource {
   uuid                    String?                 @default(dbgenerated("gen_random_uuid()")) @unique @db.Uuid
   title                   String        
   url                     String        
-  active                  Boolean                 @default(true)
+  status                  ResourceStatus          @default(PENDING)
   parentId                Int?        
   parent                  Resource?               @relation("ResourceParent", fields: [parentId], references: [id])
   children                Resource[]              @relation("ResourceParent")
@@ -34,7 +34,13 @@ model Resource {
 
   createdAt               DateTime                @default(now())
   updatedAt               DateTime?               @updatedAt
-}       
+}
+
+enum ResourceStatus {
+  PENDING
+  APPROVED
+  DELETED
+}
 
 model Flag {        
   id                      Int                     @default(autoincrement()) @id

@@ -1,5 +1,15 @@
-import { InputType, Field, Int } from '@nestjs/graphql';
-import { IsInt, IsOptional } from 'class-validator';
+import { InputType, Field, Int, registerEnumType } from '@nestjs/graphql';
+import { IsEnum, IsInt, IsOptional } from 'class-validator';
+
+export enum ResourceStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  DELETED = 'DELETED',
+}
+
+registerEnumType(ResourceStatus, {
+  name: 'ResourceStatus',
+});
 
 @InputType()
 export class ListResourcesInputDto {
@@ -17,4 +27,9 @@ export class ListResourcesInputDto {
   @IsOptional()
   @Field(() => Int, { nullable: true })
   limit?: number;
+
+  @IsOptional()
+  @IsEnum(ResourceStatus, { each: true })
+  @Field(() => [ResourceStatus], { nullable: true })
+  status?: ResourceStatus[];
 }

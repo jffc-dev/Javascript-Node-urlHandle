@@ -19,7 +19,7 @@ export class PrismaResourceMapper {
       uuid: entity.uuid ?? '',
       title: entity.title,
       url: entity.url,
-      active: entity.active,
+      status: entity.status,
       parent: null,
       children: [],
       flags: [],

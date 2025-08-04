@@ -33,6 +33,13 @@ input ListResourcesInputDto {
   participantId: Int
   page: Int
   limit: Int
+  status: [ResourceStatus!]
+}
+
+enum ResourceStatus {
+  PENDING
+  APPROVED
+  DELETED
 }
 
 type Mutation {
