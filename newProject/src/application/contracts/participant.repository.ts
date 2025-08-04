@@ -1,5 +1,5 @@
 import { Participant } from 'src/domain/participant';
-import { ListParticipantsRepositoryDto } from '../dtos/repository/list-participants.dto';
+import { ListParticipantsRepositoryDto } from '../dtos/repository/participant/list-participants.dto';
 import { CreateParticipantRepositoryDto } from '../dtos/repository/participant/create-participants.dto';
 import { FindByIdsParticipantDto } from '../dtos/repository/participant/find-by-ids.dto';
 import { FindByResourceIdsRepositoryDto } from '../dtos/repository/participant/find-by-resource-ids.dto';

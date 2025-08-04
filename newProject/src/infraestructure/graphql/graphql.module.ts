@@ -5,6 +5,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { ParticipantModule } from './resolvers/participant/participant.module';
 import { ResourceModule } from './resolvers/resource/resource.module';
+import { FlagModule } from './resolvers/flag/flag.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ResourceModule } from './resolvers/resource/resource.module';
     }),
     ParticipantModule,
     ResourceModule,
+    FlagModule,
   ],
   providers: [],
 })

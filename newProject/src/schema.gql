@@ -31,9 +31,18 @@ enum ResourceStatusGQL {
   DELETED
 }
 
+type Flag {
+  id: Int!
+  name: String!
+  createdAt: DateTime
+  updatedAt: DateTime
+  resources: [Resource!]!
+}
+
 type Query {
   listParticipants: [Participant!]!
   listResources(input: ListResourcesInputDto!): [Resource!]!
+  listFlags: [Flag!]!
 }
 
 input ListResourcesInputDto {
@@ -47,6 +56,8 @@ type Mutation {
   createParticipant(data: CreateParticipantInput!): Participant!
   updateParticipant(data: UpdateParticipantInput!): Participant!
   createResource(data: CreateResourceInput!): Resource!
+  createFlag(data: CreateFlagInput!): Flag!
+  updateFlag(data: UpdateFlagInput!): Flag!
 }
 
 input CreateParticipantInput {
@@ -65,4 +76,13 @@ input CreateResourceInput {
   status: ResourceStatusGQL
   participantIds: [Float!]
   flagIds: [Float!]
+}
+
+input CreateFlagInput {
+  name: String!
+}
+
+input UpdateFlagInput {
+  id: Float!
+  name: String
 }

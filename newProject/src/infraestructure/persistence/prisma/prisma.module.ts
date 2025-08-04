@@ -8,6 +8,8 @@ import { PrismaParticipantRepository } from './repositories/prisma-participant.r
 import { TransactionManager } from 'src/application/contracts/transaction-manager';
 import { PrismaTransactionManager } from './prisma-transaction-manager';
 import { PrismaClientManager } from './prisma-client-manager';
+import { FlagRepository } from 'src/application/contracts/flag.repository';
+import { PrismaFlagRepository } from './repositories/prisma-flag.repository';
 
 @Module({
   imports: [EnvModule],
@@ -22,11 +24,16 @@ import { PrismaClientManager } from './prisma-client-manager';
       provide: ParticipantRepository,
       useClass: PrismaParticipantRepository,
     },
+    {
+      provide: FlagRepository,
+      useClass: PrismaFlagRepository,
+    },
     { provide: TransactionManager, useClass: PrismaTransactionManager },
   ],
   exports: [
     ResourceRepository,
     ParticipantRepository,
+    FlagRepository,
     TransactionManager,
     PrismaService,
   ],

@@ -8,9 +8,10 @@ import { Resource } from 'src/domain/resource';
 import { FindResourceRepositoryDto } from 'src/application/dtos/repository/resource/find-resource.dto';
 import { FindByParticipantIdsRepositoryDto } from 'src/application/dtos/repository/resource/find-by-participant-ids.dto';
 import { CreateResourceRepositoryDto } from 'src/application/dtos/repository/resource/create.dto';
-import { SetParticipantsRepositoryDto } from 'src/application/dtos/repository/participant/set-participants.dto';
-import { SetFlagsRepositoryDto } from 'src/application/dtos/repository/participant/set-flags.dto';
+import { SetParticipantsRepositoryDto } from 'src/application/dtos/repository/resource/set-participants.dto';
+import { SetFlagsRepositoryDto } from 'src/application/dtos/repository/resource/set-flags.dto';
 import { PrismaClientManager } from '../prisma-client-manager';
+import { FindByFlagIdsRepositoryDto } from 'src/application/dtos/repository/resource/find-by-flag-ids.dto';
 
 @Injectable()
 export class PrismaResourceRepository implements ResourceRepository {
@@ -138,6 +139,37 @@ export class PrismaResourceRepository implements ResourceRepository {
             some: {
               id: {
                 in: participantIds,
+              },
+            },
+          },
+        },
+      });
+
+      const data = resources.map((resource) =>
+        PrismaResourceMapper.toDomain(resource),
+      );
+      return data;
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        this.handleDBError(error, ACTION_FIND);
+      }
+      throw error;
+    }
+  }
+
+  async findByFlagIds(query: FindByFlagIdsRepositoryDto): Promise<Resource[]> {
+    const { flagIds } = query;
+    try {
+      const prismaTx = this.clientManager.getClient();
+      const resources = await prismaTx.resource.findMany({
+        include: {
+          flags: true,
+        },
+        where: {
+          flags: {
+            some: {
+              id: {
+                in: flagIds,
               },
             },
           },
