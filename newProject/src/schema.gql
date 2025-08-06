@@ -41,11 +41,16 @@ enum ResourceStatusGQL {
   OVERWRITTEN
 }
 
+type GetRandomResourceOutputDto {
+  resources: [Resource!]!
+  ids: [Int!]!
+}
+
 type Query {
   listParticipants: [Participant!]!
   listResources(input: ListResourcesInputDto!): [Resource!]!
   getResource(input: GetResourceInputDto!): Resource!
-  getRandomResources(input: GetRandomResourceInputDto!): [Resource!]!
+  getRandomResources(input: GetRandomResourceInputDto!): GetRandomResourceOutputDto!
   listFlags: [Flag!]!
 }
 
@@ -62,6 +67,7 @@ input GetResourceInputDto {
 
 input GetRandomResourceInputDto {
   size: Int!
+  initialIds: [Int!]
 }
 
 type Mutation {

@@ -6,12 +6,13 @@ import { SetParticipantsRepositoryDto } from '../dtos/repository/resource/set-pa
 import { SetFlagsRepositoryDto } from '../dtos/repository/resource/set-flags.dto';
 import { FindByFlagIdsRepositoryDto } from '../dtos/repository/resource/find-by-flag-ids.dto';
 import { UpdateResourceRepositoryDto } from '../dtos/repository/resource/update.dto';
+import { GetRandomRepositoryDto } from '../dtos/repository/resource/get-random.dto';
 
 export abstract class ResourceRepository {
   abstract find(query: FindResourceRepositoryDto): Promise<Resource[]>;
   abstract findByResourceIds(resourceIds: number[]): Promise<Resource[]>;
   abstract get(id: number): Promise<Resource>;
-  abstract getRandom(size: number): Promise<number[]>;
+  abstract getRandom(query: GetRandomRepositoryDto): Promise<number[]>;
   abstract findByParticipantIds(
     query: FindByParticipantIdsRepositoryDto,
   ): Promise<Resource[]>;

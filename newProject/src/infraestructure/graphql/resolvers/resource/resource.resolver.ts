@@ -11,17 +11,18 @@ import { Resource } from '../../entities/resource.entity';
 import { GetResourcesUseCase } from 'src/application/use-cases/resource/get-resources.use-case';
 import { Participant } from '../../entities/participant.entity';
 import { ParticipantsByResourceLoader } from 'src/infraestructure/common/dataloaders/participants-by-resource.loader';
-import { ListResourcesInputDto } from '../../dto/resource/list.input.dto';
+import { ListResourcesInputDto } from '../../dto/input/resource/list.input.dto';
 import { CreateResourceInput } from 'src/application/dtos/requests/resource/create-resource.input';
 import { CreateResourceUseCase } from 'src/application/use-cases/resource/create.use-case';
 import { Flag } from '../../entities/flag.entity';
 import { FlagsByResourceLoader } from 'src/infraestructure/common/dataloaders/flags-by-resource.loader';
-import { GetResourceInputDto } from '../../dto/resource/get.dto';
+import { GetResourceInputDto } from '../../dto/input/resource/get.dto';
 import { GetResourceUseCase } from 'src/application/use-cases/resource/get-resource.use-case';
 import { UpdateResourceInput } from 'src/application/dtos/requests/resource/update-resource.input';
 import { UpdateResourceUseCase } from 'src/application/use-cases/resource/update.use-case';
-import { GetRandomResourceInputDto } from '../../dto/resource/get-random.dto';
+import { GetRandomResourceInputDto } from '../../dto/input/resource/get-random.dto';
 import { GetRandomResourceUseCase } from 'src/application/use-cases/resource/get-random.use-case';
+import { GetRandomResourceOutputDto } from '../../dto/output/resource/get-random.output';
 
 @UsePipes(
   new ValidationPipe({
@@ -50,7 +51,7 @@ export class ResourceResolver {
     return this.getResourceUseCase.execute(input);
   }
 
-  @Query(() => [Resource], { name: 'getRandomResources' })
+  @Query(() => GetRandomResourceOutputDto, { name: 'getRandomResources' })
   getRandom(@Args('input') input: GetRandomResourceInputDto) {
     return this.getRandomResourceUseCase.execute(input);
   }

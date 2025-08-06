@@ -13,6 +13,7 @@ import { SetFlagsRepositoryDto } from 'src/application/dtos/repository/resource/
 import { PrismaClientManager } from '../prisma-client-manager';
 import { FindByFlagIdsRepositoryDto } from 'src/application/dtos/repository/resource/find-by-flag-ids.dto';
 import { UpdateResourceRepositoryDto } from 'src/application/dtos/repository/resource/update.dto';
+import { GetRandomRepositoryDto } from 'src/application/dtos/repository/resource/get-random.dto';
 
 @Injectable()
 export class PrismaResourceRepository implements ResourceRepository {
@@ -43,8 +44,13 @@ export class PrismaResourceRepository implements ResourceRepository {
         },
       });
 
-      const data = resources.map((resource) => {
-        return PrismaResourceMapper.toDomain(resource);
+      const resourceMap = new Map(resources.map((r) => [r.id, r]));
+      const orderedResources = resourceIds
+        .map((id) => resourceMap.get(id))
+        .filter(Boolean);
+
+      const data = orderedResources.map((resource) => {
+        return PrismaResourceMapper.toDomain(resource!);
       });
       return data;
     } catch (error) {
@@ -55,12 +61,16 @@ export class PrismaResourceRepository implements ResourceRepository {
     }
   }
 
-  async getRandom(size: number): Promise<number[]> {
+  async getRandom(query: GetRandomRepositoryDto): Promise<number[]> {
+    const { size, initialIds = [] } = query;
     try {
       const prismaTx = this.clientManager.getClient();
       const resources = await prismaTx.$queryRaw<{ id: number }[]>`
+        WITH id_list AS (
+          SELECT unnest(${initialIds}::int[]) AS resourceId
+        )
         SELECT id FROM "Resource" 
-        WHERE "status" = 'PENDING'
+        WHERE "status" = 'PENDING' AND id NOT IN (SELECT resourceId FROM id_list)
         ORDER BY RANDOM() LIMIT ${size}
       `;
 
