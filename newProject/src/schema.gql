@@ -39,6 +39,7 @@ enum ResourceStatusGQL {
   APPROVED
   DELETED
   OVERWRITTEN
+  NOT_FOUND
 }
 
 type GetRandomResourceOutputDto {

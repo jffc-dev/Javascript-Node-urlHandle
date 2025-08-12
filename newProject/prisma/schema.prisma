@@ -41,6 +41,7 @@ enum ResourceStatus {
   APPROVED
   DELETED
   OVERWRITTEN
+  NOT_FOUND
 }
 
 model Flag {        
