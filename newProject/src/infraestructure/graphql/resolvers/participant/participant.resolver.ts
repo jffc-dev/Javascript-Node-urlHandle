@@ -15,6 +15,7 @@ import { Resource } from '../../entities/resource.entity';
 import { ResourcesByParticipantLoader } from 'src/infraestructure/common/dataloaders/resources-by-participant.loader';
 import { UpdateParticipantInput } from 'src/application/dtos/requests/participant/update-participant.input';
 import { UpdateParticipantUseCase } from 'src/application/use-cases/participant/update.use-case';
+import { ListParticipantInputDto } from '../../dto/input/participant/list.dto';
 
 @UsePipes(
   new ValidationPipe({
@@ -32,8 +33,8 @@ export class ParticipantResolver {
   ) {}
 
   @Query(() => [Participant], { name: 'listParticipants' })
-  list() {
-    return this.listParticipantsUseCase.execute({});
+  list(@Args('input') input: ListParticipantInputDto) {
+    return this.listParticipantsUseCase.execute(input);
   }
 
   @Mutation(() => Participant, { name: 'createParticipant' })

@@ -10,6 +10,7 @@ import { GetFlagsByResourceIdsUseCase } from 'src/application/use-cases/flag/get
 import { GetResourceUseCase } from 'src/application/use-cases/resource/get-resource.use-case';
 import { UpdateResourceUseCase } from 'src/application/use-cases/resource/update.use-case';
 import { GetRandomResourceUseCase } from 'src/application/use-cases/resource/get-random.use-case';
+import { LoadTitleUseCase } from 'src/application/use-cases/resource/load-title.use-case';
 
 @Module({
   providers: [
@@ -21,6 +22,7 @@ import { GetRandomResourceUseCase } from 'src/application/use-cases/resource/get
     CreateResourceUseCase,
     GetFlagsByResourceIdsUseCase,
     GetRandomResourceUseCase,
+    LoadTitleUseCase,
 
     ParticipantsByResourceLoader,
     FlagsByResourceLoader,

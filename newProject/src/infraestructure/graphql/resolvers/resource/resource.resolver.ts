@@ -23,6 +23,8 @@ import { UpdateResourceUseCase } from 'src/application/use-cases/resource/update
 import { GetRandomResourceInputDto } from '../../dto/input/resource/get-random.dto';
 import { GetRandomResourceUseCase } from 'src/application/use-cases/resource/get-random.use-case';
 import { GetRandomResourceOutputDto } from '../../dto/output/resource/get-random.output';
+import { LoadTitleInputDto } from '../../dto/input/resource/load';
+import { LoadTitleUseCase } from 'src/application/use-cases/resource/load-title.use-case';
 
 @UsePipes(
   new ValidationPipe({
@@ -35,6 +37,7 @@ export class ResourceResolver {
     private readonly getResourcesUseCase: GetResourcesUseCase,
     private readonly getResourceUseCase: GetResourceUseCase,
     private readonly getRandomResourceUseCase: GetRandomResourceUseCase,
+    private readonly loadTitleUseCase: LoadTitleUseCase,
     private readonly createResourceUseCase: CreateResourceUseCase,
     private readonly updateResourceUseCase: UpdateResourceUseCase,
     private readonly participantsByResourceLoader: ParticipantsByResourceLoader,
@@ -54,6 +57,11 @@ export class ResourceResolver {
   @Query(() => GetRandomResourceOutputDto, { name: 'getRandomResources' })
   getRandom(@Args('input') input: GetRandomResourceInputDto) {
     return this.getRandomResourceUseCase.execute(input);
+  }
+
+  @Query(() => String, { name: 'loadTitle' })
+  loadTitle(@Args('input') input: LoadTitleInputDto) {
+    return this.loadTitleUseCase.execute(input);
   }
 
   @ResolveField(() => [Participant], { name: 'participants' })

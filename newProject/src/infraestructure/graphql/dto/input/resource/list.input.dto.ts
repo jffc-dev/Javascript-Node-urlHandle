@@ -1,13 +1,20 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
-import { IsEnum, IsInt, IsOptional } from 'class-validator';
+import { IsArray, IsEnum, IsInt, IsOptional } from 'class-validator';
 import { ResourceStatus } from 'generated/prisma';
 
 @InputType()
 export class ListResourcesInputDto {
-  @IsInt()
+  @IsArray()
+  @IsInt({ each: true })
   @IsOptional()
-  @Field(() => Int, { nullable: true })
-  participantId?: number;
+  @Field(() => [Int], { nullable: true })
+  participantIds?: number[];
+
+  @IsArray()
+  @IsInt({ each: true })
+  @IsOptional()
+  @Field(() => [Int], { nullable: true })
+  flagIds?: number[];
 
   @IsInt()
   @IsOptional()

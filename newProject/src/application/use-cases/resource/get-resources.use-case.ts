@@ -8,6 +8,8 @@ interface GetResourcesUseCaseProps {
   page?: number;
   limit?: number;
   status?: ResourceStatus[];
+  participantIds?: number[];
+  flagIds?: number[];
 }
 @Injectable()
 export class GetResourcesUseCase {
@@ -21,12 +23,14 @@ export class GetResourcesUseCase {
       page = 1,
       limit = this.envService.get('DEFAULT_PAGE_SIZE'),
       status = ['APPROVED'],
+      participantIds = [],
+      flagIds = [],
     } = query;
 
     const resourceResponse = await this.resourceRepository.find({
       page,
       limit,
-      filter: { status },
+      filter: { status, participantIds, flagIds },
     });
     return resourceResponse;
   }

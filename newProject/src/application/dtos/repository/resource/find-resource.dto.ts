@@ -8,4 +8,6 @@ export interface FindResourceRepositoryDto {
 
 interface FindResourceRepositoryFilter {
   status: ResourceStatus[];
+  participantIds: number[];
+  flagIds: number[];
 }

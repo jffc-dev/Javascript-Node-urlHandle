@@ -47,15 +47,22 @@ type GetRandomResourceOutputDto {
 }
 
 type Query {
-  listParticipants: [Participant!]!
+  listParticipants(input: ListParticipantInputDto!): [Participant!]!
   listResources(input: ListResourcesInputDto!): [Resource!]!
   getResource(input: GetResourceInputDto!): Resource!
   getRandomResources(input: GetRandomResourceInputDto!): GetRandomResourceOutputDto!
+  loadTitle(input: LoadTitleInputDto!): String!
   listFlags: [Flag!]!
 }
 
+input ListParticipantInputDto {
+  page: Int
+  limit: Int
+}
+
 input ListResourcesInputDto {
-  participantId: Int
+  participantIds: [Int!]
+  flagIds: [Int!]
   page: Int
   limit: Int
   status: [ResourceStatusGQL!]
@@ -68,6 +75,10 @@ input GetResourceInputDto {
 input GetRandomResourceInputDto {
   size: Int!
   initialIds: [Int!]
+}
+
+input LoadTitleInputDto {
+  url: String!
 }
 
 type Mutation {

@@ -205,6 +205,7 @@ export class PrismaResourceRepository implements ResourceRepository {
 
   async find(query: FindResourceRepositoryDto): Promise<Resource[]> {
     const { page, limit, filter } = query;
+    const { status, participantIds, flagIds } = filter;
     try {
       const prismaTx = this.clientManager.getClient();
       const resources = await prismaTx.resource.findMany({
@@ -214,9 +215,29 @@ export class PrismaResourceRepository implements ResourceRepository {
         take: limit,
         skip: (page - 1) * limit,
         where: {
-          status: {
-            in: filter.status,
-          },
+          AND: [
+            {
+              status: {
+                in: status,
+              },
+            },
+            {
+              participants: {
+                some: {
+                  id: participantIds.length
+                    ? { in: participantIds }
+                    : undefined,
+                },
+              },
+            },
+            {
+              flags: {
+                some: {
+                  id: flagIds.length ? { in: flagIds } : undefined,
+                },
+              },
+            },
+          ],
         },
       });
 
