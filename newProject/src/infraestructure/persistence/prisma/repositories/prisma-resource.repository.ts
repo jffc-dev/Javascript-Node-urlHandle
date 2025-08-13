@@ -70,7 +70,7 @@ export class PrismaResourceRepository implements ResourceRepository {
           SELECT unnest(${initialIds}::int[]) AS resourceId
         )
         SELECT id FROM "Resource" 
-        WHERE "status" = 'PENDING' AND id NOT IN (SELECT resourceId FROM id_list)
+        WHERE "status" IN ('PENDING', 'APPROVED') AND id NOT IN (SELECT resourceId FROM id_list)
         ORDER BY RANDOM() LIMIT ${size}
       `;
 

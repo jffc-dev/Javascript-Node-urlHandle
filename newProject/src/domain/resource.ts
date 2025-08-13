@@ -7,7 +7,8 @@ type ResourceStatus =
   | 'APPROVED'
   | 'DELETED'
   | 'OVERWRITTEN'
-  | 'NOT_FOUND';
+  | 'NOT_FOUND'
+  | 'OBSERVED';
 
 interface ResourceProps {
   id: number;

@@ -45,6 +45,6 @@ export class LoadTitleUseCase {
       bodyTitle = $('title').text();
     }
 
-    return bodyTitle;
+    return bodyTitle.trim();
   }
 }
