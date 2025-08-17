@@ -29,5 +29,9 @@ export class ListResourcesInputDto {
   @IsOptional()
   @IsEnum(ResourceStatus, { each: true })
   @Field(() => [ResourceStatus], { nullable: true })
-  status?: ResourceStatus[];
+  statuses?: ResourceStatus[];
+
+  @IsOptional()
+  @Field(() => String, { nullable: true })
+  urlTitle?: string;
 }

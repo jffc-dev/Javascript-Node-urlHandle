@@ -205,9 +205,46 @@ export class PrismaResourceRepository implements ResourceRepository {
 
   async find(query: FindResourceRepositoryDto): Promise<Resource[]> {
     const { page, limit, filter } = query;
-    const { status, participantIds, flagIds } = filter;
+    const { statuses, participantIds, flagIds, urlTitle } = filter;
     try {
       const prismaTx = this.clientManager.getClient();
+
+      const whereConditions: Prisma.ResourceWhereInput[] = [
+        {
+          status: {
+            in: statuses,
+          },
+        },
+        {
+          OR: [
+            { title: { contains: urlTitle, mode: 'insensitive' } },
+            { url: { contains: urlTitle, mode: 'insensitive' } },
+          ],
+        },
+      ];
+
+      // Conditionally add participants filter
+      if (participantIds.length > 0) {
+        whereConditions.push({
+          participants: {
+            some: {
+              id: { in: participantIds },
+            },
+          },
+        });
+      }
+
+      // Conditionally add flags filter
+      if (flagIds.length > 0) {
+        whereConditions.push({
+          flags: {
+            some: {
+              id: { in: flagIds },
+            },
+          },
+        });
+      }
+
       const resources = await prismaTx.resource.findMany({
         include: {
           participants: true,
@@ -215,29 +252,7 @@ export class PrismaResourceRepository implements ResourceRepository {
         take: limit,
         skip: (page - 1) * limit,
         where: {
-          AND: [
-            {
-              status: {
-                in: status,
-              },
-            },
-            {
-              participants: {
-                some: {
-                  id: participantIds.length
-                    ? { in: participantIds }
-                    : undefined,
-                },
-              },
-            },
-            {
-              flags: {
-                some: {
-                  id: flagIds.length ? { in: flagIds } : undefined,
-                },
-              },
-            },
-          ],
+          AND: whereConditions,
         },
       });
 

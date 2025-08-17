@@ -7,9 +7,10 @@ import { EnvService } from 'src/infraestructure/env/env.service';
 interface GetResourcesUseCaseProps {
   page?: number;
   limit?: number;
-  status?: ResourceStatus[];
+  statuses?: ResourceStatus[];
   participantIds?: number[];
   flagIds?: number[];
+  urlTitle?: string;
 }
 @Injectable()
 export class GetResourcesUseCase {
@@ -22,15 +23,16 @@ export class GetResourcesUseCase {
     const {
       page = 1,
       limit = this.envService.get('DEFAULT_PAGE_SIZE'),
-      status = ['APPROVED'],
+      statuses = ['APPROVED'],
       participantIds = [],
       flagIds = [],
+      urlTitle = '',
     } = query;
 
     const resourceResponse = await this.resourceRepository.find({
       page,
       limit,
-      filter: { status, participantIds, flagIds },
+      filter: { statuses, participantIds, flagIds, urlTitle },
     });
     return resourceResponse;
   }

@@ -67,7 +67,8 @@ input ListResourcesInputDto {
   flagIds: [Int!]
   page: Int
   limit: Int
-  status: [ResourceStatusGQL!]
+  statuses: [ResourceStatusGQL!]
+  urlTitle: String
 }
 
 input GetResourceInputDto {
