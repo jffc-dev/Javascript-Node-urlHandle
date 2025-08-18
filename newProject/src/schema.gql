@@ -105,7 +105,6 @@ input UpdateParticipantInput {
 input CreateResourceInput {
   title: String!
   url: String!
-  parentId: Float
   status: ResourceStatusGQL
   participantIds: [Int!]
   flagIds: [Int!]

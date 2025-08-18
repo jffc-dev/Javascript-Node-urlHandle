@@ -12,10 +12,6 @@ export class CreateResourceInput {
   @IsUrl()
   url: string;
 
-  @Field(() => Number, { nullable: true })
-  @IsNumber()
-  parentId?: number;
-
   @IsOptional()
   @IsEnum(ResourceStatus)
   @Field(() => ResourceStatus, { nullable: true })

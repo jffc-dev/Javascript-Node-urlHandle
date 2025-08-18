@@ -7,7 +7,6 @@ import { Resource } from 'src/domain/resource';
 interface CreateResourceUseCaseProps {
   title: string;
   url: string;
-  parentId?: number;
   status?: ResourceStatus;
   participantIds?: number[];
   flagIds?: number[];
@@ -20,20 +19,12 @@ export class CreateResourceUseCase {
   ) {}
 
   async execute(query: CreateResourceUseCaseProps): Promise<Resource> {
-    const {
-      title,
-      url,
-      parentId,
-      status,
-      participantIds = [],
-      flagIds = [],
-    } = query;
+    const { title, url, status, participantIds = [], flagIds = [] } = query;
 
     return await this.transactionManager.run(async () => {
       const resourceResponse = await this.resourceRepository.create({
         title,
         url,
-        parentId,
         status,
       });
 

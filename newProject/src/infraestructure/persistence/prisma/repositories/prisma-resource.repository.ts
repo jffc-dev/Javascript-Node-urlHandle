@@ -180,7 +180,7 @@ export class PrismaResourceRepository implements ResourceRepository {
   }
 
   async create(input: CreateResourceRepositoryDto): Promise<Resource> {
-    const { title, url, parentId, status = 'PENDING' } = input;
+    const { title, url, status = 'PENDING' } = input;
     try {
       const prismaTx = this.clientManager.getClient();
       const resource = await prismaTx.resource.create({
@@ -188,9 +188,6 @@ export class PrismaResourceRepository implements ResourceRepository {
           title,
           url,
           status,
-          parent: {
-            connect: parentId ? { id: parentId } : undefined,
-          },
         },
       });
 
@@ -253,6 +250,9 @@ export class PrismaResourceRepository implements ResourceRepository {
         skip: (page - 1) * limit,
         where: {
           AND: whereConditions,
+        },
+        orderBy: {
+          createdAt: 'desc',
         },
       });
 
