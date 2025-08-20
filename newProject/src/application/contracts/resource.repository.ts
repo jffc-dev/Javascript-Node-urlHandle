@@ -7,6 +7,7 @@ import { SetFlagsRepositoryDto } from '../dtos/repository/resource/set-flags.dto
 import { FindByFlagIdsRepositoryDto } from '../dtos/repository/resource/find-by-flag-ids.dto';
 import { UpdateResourceRepositoryDto } from '../dtos/repository/resource/update.dto';
 import { GetRandomRepositoryDto } from '../dtos/repository/resource/get-random.dto';
+import { QuickCreateResourcesRepositoryDto } from '../dtos/repository/resource/quick-create-many.dto';
 
 export abstract class ResourceRepository {
   abstract find(query: FindResourceRepositoryDto): Promise<Resource[]>;
@@ -20,6 +21,9 @@ export abstract class ResourceRepository {
     query: FindByFlagIdsRepositoryDto,
   ): Promise<Resource[]>;
   abstract create(input: CreateResourceRepositoryDto): Promise<Resource>;
+  abstract createMany(
+    input: QuickCreateResourcesRepositoryDto,
+  ): Promise<number>;
   abstract update(input: UpdateResourceRepositoryDto): Promise<Resource>;
   abstract setParticipants(
     input: SetParticipantsRepositoryDto,

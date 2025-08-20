@@ -11,6 +11,7 @@ import { GetResourceUseCase } from 'src/application/use-cases/resource/get-resou
 import { UpdateResourceUseCase } from 'src/application/use-cases/resource/update.use-case';
 import { GetRandomResourceUseCase } from 'src/application/use-cases/resource/get-random.use-case';
 import { LoadTitleUseCase } from 'src/application/use-cases/resource/load-title.use-case';
+import { QuickCreateResourcesUseCase } from 'src/application/use-cases/resource/quick-create-many.use-case';
 
 @Module({
   providers: [
@@ -23,6 +24,7 @@ import { LoadTitleUseCase } from 'src/application/use-cases/resource/load-title.
     GetFlagsByResourceIdsUseCase,
     GetRandomResourceUseCase,
     LoadTitleUseCase,
+    QuickCreateResourcesUseCase,
 
     ParticipantsByResourceLoader,
     FlagsByResourceLoader,

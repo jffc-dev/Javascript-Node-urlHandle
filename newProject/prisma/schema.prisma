@@ -22,8 +22,8 @@ generator prismaClassGenerator {
 model Resource {
   id                      Int                     @default(autoincrement()) @id
   uuid                    String?                 @default(dbgenerated("gen_random_uuid()")) @unique @db.Uuid
-  title                   String        
-  url                     String        
+  title                   String                  @unique
+  url                     String                  @unique
   status                  ResourceStatus          @default(PENDING)
   parentId                Int?        
   parent                  Resource?               @relation("ResourceParent", fields: [parentId], references: [id])

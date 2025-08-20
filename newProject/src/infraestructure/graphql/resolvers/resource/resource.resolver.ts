@@ -25,6 +25,8 @@ import { GetRandomResourceUseCase } from 'src/application/use-cases/resource/get
 import { GetRandomResourceOutputDto } from '../../dto/output/resource/get-random.output';
 import { LoadTitleInputDto } from '../../dto/input/resource/load';
 import { LoadTitleUseCase } from 'src/application/use-cases/resource/load-title.use-case';
+import { QuickCreateResourcesInput } from 'src/application/dtos/requests/resource/quick-create-resources.input';
+import { QuickCreateResourcesUseCase } from 'src/application/use-cases/resource/quick-create-many.use-case';
 
 @UsePipes(
   new ValidationPipe({
@@ -39,6 +41,7 @@ export class ResourceResolver {
     private readonly getRandomResourceUseCase: GetRandomResourceUseCase,
     private readonly loadTitleUseCase: LoadTitleUseCase,
     private readonly createResourceUseCase: CreateResourceUseCase,
+    private readonly quickCreateResourcesUseCase: QuickCreateResourcesUseCase,
     private readonly updateResourceUseCase: UpdateResourceUseCase,
     private readonly participantsByResourceLoader: ParticipantsByResourceLoader,
     private readonly flagsByResourceLoader: FlagsByResourceLoader,
@@ -91,6 +94,16 @@ export class ResourceResolver {
       flagIds,
     });
     return Resource.fromDomainToEntity(resource);
+  }
+  @Mutation(() => Number, { name: 'quickCreateResources' })
+  async quickCreateResources(
+    @Args('data') data: QuickCreateResourcesInput,
+  ): Promise<number> {
+    const { urls } = data;
+    const insertedCount = await this.quickCreateResourcesUseCase.execute({
+      urls,
+    });
+    return insertedCount;
   }
 
   @Mutation(() => Resource, { name: 'updateResource' })
