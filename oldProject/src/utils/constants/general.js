@@ -1,3 +1,0 @@
-export const STATUS_RESPONSE_ERROR = 0
-export const STATUS_RESPONSE_OK = 1
-export const STATUS_RESPONSE_WARNING = 2
